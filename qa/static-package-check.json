@@ -1,7 +1,9 @@
 {
+  "version": "1.4.0-rc.1",
   "authoredFilesMatchDist": true,
-  "runtimeModules": 13,
+  "runtimeModules": 14,
   "allModulesCached": true,
+  "offlineCatalogCached": true,
   "missingLocalImports": [],
   "publicDeployment": false
 }

@@ -1,20 +1,14 @@
-# Development roadmap — 1.3.0-rc.1
+# Development roadmap
 
-## Implemented batches
+Current deliverable: **1.4.0-rc.1 — expanded component catalog**.
 
-| Batch | Delivered capability |
-|---|---|
-| v1.0 foundation | Panel editor, components, fabrication geometry, wiring, rehearsal, durable local projects, reports, examples and static packages. |
-| v1.1 authoring | Opening and terminal tables, stable terminal identity, SVG Bézier/arc/affine normalization, editable scale ticks and numeric/custom legends. |
-| v1.2 reusable parts | Two manufacturer-sourced switch definitions with explicit assumptions; UNO R4 Minima/Nano Every profiles; immutable library revisions, comparison, explicit instance updates and guarded imports. |
-| v1.3 handoffs | PINNOTE native export/returned wiring, REFLEX inventory export/returned pins, COPPERBENCH board mounting-template import, conversion reports and source backups. |
+| Batch | Status | Scope |
+| --- | --- | --- |
+| v1.1 | Implemented | Opening/terminal authoring, SVG curves/transforms, scale legends. |
+| v1.2 | Implemented | Sourced definitions, controller presets, library revisions and explicit updates. |
+| v1.3 | Implemented | PINNOTE/REFLEX/COPPERBENCH handoffs with conversion reviews. |
+| v1.4 | Implemented | 267 components, 14 categories, search/filter/favorites, part details and custom tags. |
+| Stable v1.4 | Acceptance gate open | Real-browser desktop/mobile, keyboard/pointer, storage, offline/update and downloads. |
+| Next measured catalog batch | Planned | Replace prioritized generic templates with measured or primary-source footprints and explicit revision history. |
 
-## Required before a stable v1.3.0
-
-Real-browser acceptance remains open, carried forward from v1.0. The current managed environment has no supported browser-control skill; the Sites workflow forbids substituting an unmanaged preview/browser. Do not promote by changing the version string alone.
-
-Run the browser journey script and manual checklist in docs/QA.md. Verify desktop/mobile layout, keyboard/focus, pointer editing, native files/downloads, real IndexedDB, quota/cross-tab behavior, offline reload, explicit update preservation and browser performance. Correct any release blockers.
-
-## After acceptance
-
-Use fabrication feedback to prioritize additional measured component families and requested controller boards. Extend adapters only against inspected, versioned companion formats. Full solid CAD, PCB routing, circuit simulation, unrestricted firmware, machine CAM, DXF and STL remain outside this release.
+The current environment lacks the supported browser-control skill; Sites prohibits a substitute browser path. Complete `docs/QA.md` before removing the release-candidate designation. Use actual fabrication feedback to select the next measured families. No CAD, PCB routing, circuit simulator or unrestricted firmware compiler is implied by the expanded physical catalog.

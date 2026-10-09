@@ -8,16 +8,19 @@ const primitive = (shape, fill, stroke, width = .3) => svgElement({
   width
 });
 export function partIcon(d) {
-  return `<svg viewBox="-25 -22 50 44" aria-hidden="true">${frontBody({
-    definition: d,
-    color: d.color,
-    rotation: 0
-  }, false, 0)}</svg>`;
+  const w=d.front.d||d.front.w||50,h=d.front.d||d.front.h||44,pad=Math.max(w,h)*.12+2;
+  return `<svg viewBox="${-w/2-pad} ${-h/2-pad} ${w+pad*2} ${h+pad*2}" aria-hidden="true">${primitive(d.front,d.color,'#c6d2c2',.6)}${d.openings.map(s=>primitive(s,'#14241d','#c6d2c2',.5)).join('')}</svg>`;
 }
 export function frontBody(c, selected, value, display) {
   const d = c.definition,
     s = d.front;
   let html = primitive(s, c.color || d.color, '#384337', .45);
+  if(d.visual==='outline') {
+    html+=d.openings.map(s=>primitive(s,'#17271f','#a5b49e',.3)).join('');
+    if(d.kind==='display')html+=`<text x="0" y="1.5" fill="#cceab3" font-size="${Math.min(3.5,(s.w||s.d)/12)}" text-anchor="middle">${esc((display||'READY').slice(0,22))}</text>`;
+    if(['button','toggle','pot','encoder','led'].includes(d.kind))html+=primitive(circ(3,0,0),value?'#d5ff82':'#56754d','#c6d2c2',.3);
+    return html;
+  }
   const w = s.d || s.w,
     h = s.d || s.h;
   if (['button', 'pot', 'encoder', 'toggle'].includes(d.kind)) {

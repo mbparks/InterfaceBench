@@ -1,5 +1,5 @@
 /* INTERFACEBENCH • GPL-3.0-only. Canonical dimensions are millimetres. */
-export const VERSION = '1.3.0-rc.1';
+export const VERSION = '1.4.0-rc.1';
 export const SCHEMA = 3;
 export const clone = v => structuredClone(v);
 export const uid = () => globalThis.crypto?.randomUUID?.() || `id_${Date.now()}_${Math.random().toString(36).slice(2)}`;

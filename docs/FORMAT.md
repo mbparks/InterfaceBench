@@ -45,3 +45,7 @@ Library version2 uses `{format:"interfacebench-library",version:2,parts:[...]}`.
 `manufacturer`, `partNumber`, `sourceChecked` and `provenance` distinguish transcribed facts from planning assumptions. `verified` remains a separate physical-verification declaration. Companion JSON contracts and return metadata are documented in INTERCHANGE.md.
 
 Version2 library definitions may include `photoAsset` (embedded PNG/JPEG). Placement copies it into the new project asset map. Legacy saved library entries gain family/revision defaults at export.
+
+## Optional v1.4 definition metadata (schema remains 3)
+
+`category` is a string up to 100 characters; known built-in categories drive browsing, and older/unknown categories fall back by behavior kind. `tags` is an array of up to 40 strings, each up to 100 characters. `visual` is `standard` or `outline`, used only for presentation. Existing behavior kinds are unchanged. These fields travel in embedded project definitions and reusable library revisions. Missing metadata remains valid. `favoriteParts` is a list of catalog IDs in workspace preferences, not part of project design or wiring fingerprints.

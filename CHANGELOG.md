@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.0-rc.1 — 2026-10-09
+
+- Expanded built-in library from 12 to 267 parts in 14 categories: 255 additional generic planning definitions with openings, rear/access envelopes and terminals where relevant.
+- Added category/source/favorites filters, word-based multi-term search, 24-item incremental browsing, preserved search on placement and saved favorites.
+- Added dimension/offset/provenance details before placement; custom part categories and search tags; scalable geometry thumbnails and physical-outline visuals.
+- Bundled an offline catalog reference and generated exact inventory documentation. Existing definitions remain embedded and legacy imports remain supported.
+- 57 automated tests pass, including all-definition placement, JSON/exports, internal cut-pattern geometry, complex PDF/ZIP output and library browsing contracts.
+- Still a release candidate: supported real-browser QA remains unavailable. No deployment or hardware validation claimed.
+
 ## 1.3.0-rc.1 — 2026-10-09
 
 Development continued in v1.1, v1.2 and v1.3 implementation batches. Browser release acceptance remains open.

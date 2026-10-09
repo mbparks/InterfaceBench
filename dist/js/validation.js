@@ -80,6 +80,9 @@ export function validateDefinition(d) {
   if(d.photoAsset && (d.photoAsset.type!=='raster'||typeof d.photoAsset.data!=='string'||d.photoAsset.data.length>16000000||!/^data:image\/(png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(d.photoAsset.data)))throw Error('Library photo must be an embedded PNG or JPEG.');
   str(d.id, 'Definition ID', 200);
   str(d.name, 'Part name');
+  if(d.category!==undefined)str(d.category,'Component category',100);
+  if(d.tags!==undefined){if(!Array.isArray(d.tags)||d.tags.length>40)throw Error('Provide up to 40 search tags.');d.tags.forEach(t=>str(t,'Search tag',100));}
+  if(d.visual!==undefined&&!['standard','outline'].includes(d.visual))throw Error('Unsupported component visual.');
   if(d.libraryId!==undefined)str(d.libraryId,'Part family',200);
   if(d.libraryRevision!==undefined){num(d.libraryRevision,'Library revision',1,100000);if(!Number.isInteger(d.libraryRevision))throw Error('Library revision must be an integer.');}
   str(d.kind, 'Part kind', 100);

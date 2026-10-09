@@ -35,3 +35,6 @@ Current implementation boundaries: envelopes are circles/rectangles; no 3D B-rep
 - `interchange.js`: version-bounded native adapters and explicit conversion reports, without networking.
 
 Each module is included in the scoped service-worker cache. All new imports use the existing validated, undoable mutation boundary. Companion import review checks that the source project did not change while the dialog was open.
+
+- `component-library.js`: 267 built-in parts, category/source resolution, dimension summaries and word-based search. Generic factories declare illustrative geometry and placeholder terminals. App catalog state is separate from project history; favorites live in workspace preferences.
+- `scripts/catalog-docs.mjs`: generates the exact inventory, standalone offline catalog and release/catalog report from source definitions. Run before `scripts/sync-dist.py`.

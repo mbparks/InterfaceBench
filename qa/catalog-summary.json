@@ -1,0 +1,79 @@
+{
+  "version": "1.4.0-rc.1",
+  "total": 267,
+  "added": 255,
+  "generic": 265,
+  "sourced": 2,
+  "categories": [
+    {
+      "id": "buttons",
+      "name": "Pushbuttons",
+      "count": 23
+    },
+    {
+      "id": "switches",
+      "name": "Switches & selectors",
+      "count": 23
+    },
+    {
+      "id": "rotary",
+      "name": "Knobs & rotary controls",
+      "count": 17
+    },
+    {
+      "id": "linear",
+      "name": "Faders & joysticks",
+      "count": 12
+    },
+    {
+      "id": "indicators",
+      "name": "Indicators & sound",
+      "count": 18
+    },
+    {
+      "id": "displays",
+      "name": "Displays & meters",
+      "count": 21
+    },
+    {
+      "id": "audio",
+      "name": "Audio & coax connectors",
+      "count": 19
+    },
+    {
+      "id": "data",
+      "name": "Data & multipin connectors",
+      "count": 35
+    },
+    {
+      "id": "power",
+      "name": "Power & protection",
+      "count": 16
+    },
+    {
+      "id": "sensors",
+      "name": "Sensors & apertures",
+      "count": 14
+    },
+    {
+      "id": "cable",
+      "name": "Cable entry & routing",
+      "count": 16
+    },
+    {
+      "id": "mounting",
+      "name": "Fasteners & mounting",
+      "count": 26
+    },
+    {
+      "id": "ventilation",
+      "name": "Fans & ventilation",
+      "count": 15
+    },
+    {
+      "id": "carriers",
+      "name": "Board & module carriers",
+      "count": 12
+    }
+  ]
+}

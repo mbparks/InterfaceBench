@@ -1,5 +1,6 @@
 import {exportPinnote,exportReflex,importCopperbench,importAssignments} from './interchange.js';
-import {manufacturerParts,controllerProfiles,revisionInfo,nextRevision,revisionChanges,assignmentImpact,mergeLibrary,libraryDocument} from './catalog.js';
+import {controllerProfiles,revisionInfo,nextRevision,revisionChanges,assignmentImpact,mergeLibrary,libraryDocument} from './catalog.js';
+import {builtinParts,categories,partCategory,categoryLabel,sourceLabel,partSource,filterParts,shapeSummary,openingSummary} from './component-library.js';
 import {openingRows, terminalRows} from './definition-editor.js';
 import { VERSION, SCHEMA, clone, uid, esc, layers, layerNames, roles, starterParts, newProject, newPanel, example, addComponent, parseUnit, formatUnit, objects, fingerprints, baselineDiff, designContent, stable, rect, circ, uno, instantiateDefinition } from './model.js';
 import { setFont, objectBounds, transform, mirror, boxesOverlap, flatten, commands, inside, scene } from './geometry.js';
@@ -25,7 +26,8 @@ export const app = {
     coarse: 5,
     envelopes: false,
     leftWidth: 230,
-    rightWidth: 285
+    rightWidth: 285,
+    favoriteParts: []
   },
   stage: 'arrange',
   side: 'front',
@@ -38,7 +40,8 @@ export const app = {
   },
   past: [],
   future: [],
-  library: clone([...starterParts,...manufacturerParts]),
+  library: clone(builtinParts),
+  catalog: {query:'',category:'all',source:'all',limit:24},
   checks: [],
   inspectorTab: 'inspect',
   compare: null,
@@ -274,15 +277,32 @@ function renderStatus() {
 }
 function renderLeft() {
   const b = app.panel;
+  const catalogScroll = $('#partResults')?.scrollTop || 0;
   let html = `<div class="left-section"><div class="section-label">PANELS ${btn('+ Add', 'add-panel', 'small')}</div>${app.p.panels.map(p => `<button class="panel-tab ${p.id === b.id ? 'active' : ''}" data-action="panel" data-id="${p.id}"><span class="panel-icon"><i></i><i></i><i></i></span><span><strong>${esc(p.name)}</strong><small>${unit(p.w)} × ${unit(p.h)} ${app.prefs.units}</small></span></button>`).join('')}<div class="row">${btn('Panel settings', 'panel-settings', 'small')}${btn('Projects', 'home', 'small')}</div></div>`;
   if (app.stage === 'rehearse') {
     html += `<div class="left-section"><div class="section-label">LIVE VARIABLES</div>${Object.entries(app.sim.variables).map(([k, v]) => `<div class="value-line"><span>${esc(k)}</span><strong>${+v.toFixed(2)}</strong></div>`).join('')}<div class="note">Interaction rehearsal. Geometry and wiring are unchanged. This is not hardware or safety validation.</div>${btn('↺ Reset rehearsal', 'reset-sim', 'wide')}<div class="row" style="margin-top:9px">${btn('Edit rules', 'rules', 'small')}${btn('Initial values', 'variables', 'small')}</div></div><div class="left-section"><div class="section-label">EVENT TRACE</div><div class="trace">${esc(app.sim.trace.join('\n') || 'Operate a control to begin.')}</div></div>`;
-  } else html += `<div class="left-section"><div class="section-label">COMPONENT LIBRARY ${btn('＋', 'custom-new', 'small', 'title="Create a custom part"')}</div><input class="search" id="partSearch" placeholder="Search parts…" aria-label="Search component library"><div class="part-grid" id="partGrid">${partsHTML('')}</div><div class="library-legend"><span>GENERIC + SOURCED PARTS</span><span>CLICK TO PLACE</span></div><details><summary>Manage custom library</summary><div class="row">${btn('Import', 'library-import', 'small')}${btn('Export', 'library-export', 'small')}</div></details></div>`;
+  } else html += `<div class="left-section"><div class="section-label">COMPONENT LIBRARY ${btn('＋', 'custom-new', 'small', 'title="Create a custom part"')}</div><input class="search" id="partSearch" value="${esc(app.catalog.query)}" placeholder="USB, fader, M3, 22 mm…" aria-label="Search component library"><div class="catalog-filters"><select id="partCategory" aria-label="Component category">${options([['all',`All categories (${app.library.length})`],...categories.map(([id,name])=>[id,`${name} (${app.library.filter(d=>partCategory(d)===id).length})`])],app.catalog.category)}</select><select id="partSource" aria-label="Component source">${options([['all','All sources'],['generic','Generic templates'],['sourced','Manufacturer sourced'],['custom','My custom parts'],['favorites','★ Favorites']],app.catalog.source)}</select></div><div class="catalog-status"><span id="partCount" role="status" aria-live="polite">${catalogCount()}</span>${btn('Reset','catalog-reset','small','aria-label="Reset component filters"')}</div><div class="catalog-results" id="partResults">${partsHTML()}</div><p class="catalog-caveat">Generic = planning geometry. Measure your hardware before cutting. <a href="./CATALOG.html" target="_blank" rel="noopener">Full catalog ↗</a></p><details><summary>Manage custom library</summary><div class="row">${btn('Import', 'library-import', 'small')}${btn('Export', 'library-export', 'small')}</div></details></div>`;
   html += `<div class="left-section"><div class="section-label">OBJECTS <span>${objects(b).length}</span></div><input class="search" id="objectSearch" placeholder="Find a reference or label…" aria-label="Search objects"><div class="object-list" id="objectList">${objectList('')}</div><div class="row" style="margin-top:10px">${!app.sim ? btn('+ Artwork', 'artwork', 'small') + btn('Arrange', 'arrange', 'small') : ''}</div></div><div class="left-section"><div class="section-label">LAYERS <span>VIEW / LOCK / EXPORT</span></div>${layers.map(l => `<div class="layer-row"><input type="checkbox" aria-label="Show ${layerNames[l]}" data-layer="${l}" data-layer-key="visible" ${b.layers[l].visible ? 'checked' : ''}><em>${esc(layerNames[l])}</em><button data-action="layer-lock" data-layer="${l}" title="${b.layers[l].locked ? 'Unlock' : 'Lock'} ${layerNames[l]}">${b.layers[l].locked ? '▣' : '□'}</button><input type="checkbox" aria-label="Export ${layerNames[l]}" data-layer="${l}" data-layer-key="export" ${b.layers[l].export ? 'checked' : ''}></div>`).join('')}<p class="help-text">Hiding a layer only changes the canvas. Export uses the rightmost checkboxes.</p></div><div class="left-section"><div class="row">${btn('Baselines', 'baselines', 'small')}${btn('Recovery', 'recovery', 'small')}</div><div class="row advanced-only" style="margin-top:8px">${btn('Assumptions & evidence', 'registers', 'small wide')}</div></div>`;
   $('#leftContent').innerHTML = html;
+  if ($('#partResults')) $('#partResults').scrollTop = catalogScroll;
 }
-function partsHTML(q) {
-  return app.library.filter(d => (d.name+' '+(d.manufacturer||'')).toLowerCase().includes(q.toLowerCase())).map(d => `<button class="part" data-action="add-part" data-id="${esc(d.id)}" title="Add ${esc(d.name)}">${partIcon(d)}${esc(d.name)}</button>`).join('') || '<p class="empty">No matching parts.</p>';
+function catalogMatches() { return filterParts(app.library,{...app.catalog,favorites:app.prefs.favoriteParts}); }
+function catalogCount() { const n=catalogMatches().length; return `${Math.min(app.catalog.limit,n)} of ${n} parts`; }
+function partsHTML() {
+  const matches=catalogMatches(),saved=new Set(app.prefs.favoriteParts);
+  if(!matches.length)return `<div class="empty"><strong>No matching parts.</strong>Try fewer search words or another category.${btn('Clear filters','catalog-reset','small wide')}</div>`;
+  return `<div class="part-grid" id="partGrid">${matches.slice(0,app.catalog.limit).map(d=>`<div class="part-card"><button class="part" data-action="add-part" data-id="${esc(d.id)}" title="Place ${esc(d.name)}" aria-label="Place ${esc(d.name)}">${partIcon(d)}<strong>${esc(d.name)}</strong><small class="source-${partSource(d)}">${sourceLabel(d)}</small><small>${esc(d.openings.length===1?openingSummary(d):`${d.openings.length} openings`)}</small></button><div class="part-actions">${btn('Details','part-details','small',`data-id="${esc(d.id)}" aria-label="Details for ${esc(d.name)}"`)}${btn(saved.has(d.id)?'★':'☆','part-favorite','small',`data-id="${esc(d.id)}" aria-label="Favorite ${esc(d.name)}" aria-pressed="${saved.has(d.id)}"`)}</div></div>`).join('')}</div>${matches.length>app.catalog.limit?btn(`Show ${Math.min(24,matches.length-app.catalog.limit)} more`,'catalog-more','small wide catalog-more'):''}`;
+}
+function refreshCatalog(reset=false) {
+  if(reset)app.catalog.limit=24;
+  const scroll=reset?0:$('#partResults').scrollTop;
+  $('#partResults').innerHTML=partsHTML();$('#partResults').scrollTop=scroll;
+  $('#partCount').textContent=catalogCount();
+}
+function partDetails(id) {
+  const d=app.library.find(x=>x.id===id);if(!d)return;
+  const status=partSource(d),source=status==='sourced'?'Manufacturer drawing dimensions; clearance assumptions still require review.':status==='generic'?'Generic planning template. All dimensions and terminals must be checked against your actual hardware.':'Custom definition. Review its recorded evidence and dimensions.';
+  modal(d.name,`<div class="part-detail-hero">${partIcon(d)}<div><div class="eyebrow">${esc(categoryLabel(d))} · ${sourceLabel(d)}</div><p>${esc(source)}</p></div></div><div class="table-wrap"><table><tbody><tr><th>Front face</th><td>${esc(shapeSummary(d.front))} mm</td></tr><tr><th>Rear envelope</th><td>${esc(shapeSummary(d.rear))} mm</td></tr><tr><th>Access envelope</th><td>${esc(shapeSummary(d.access))} mm</td></tr><tr><th>Rear depth + bend</th><td>${d.depth} + ${d.bend} mm</td></tr><tr><th>Panel thickness</th><td>${d.minThickness}–${d.maxThickness} mm</td></tr><tr><th>Reference</th><td>${esc(d.mountReference)}</td></tr></tbody></table></div><h3 class="section">${d.openings.length} opening${d.openings.length===1?'':'s'} · millimetres</h3><div class="table-wrap catalog-detail-table"><table><thead><tr><th>Shape</th><th>Size</th><th>X</th><th>Y</th></tr></thead><tbody>${d.openings.map(s=>`<tr><td>${esc(s.type)}</td><td>${esc(shapeSummary(s))}</td><td>${s.x??0}</td><td>${s.y??0}</td></tr>`).join('')}</tbody></table></div><h3 class="section">${d.terminals.length} terminals</h3><p>${d.terminals.length?d.terminals.map(t=>`${esc(t.name)} (${esc(t.role)}, ${t.voltage} V)`).join(' · '):'Mechanical template; no electrical terminals.'}</p><p>${['connector','mount'].includes(d.kind)?'Geometry and wiring documentation only; no active rehearsal behavior.':`Rehearsal model: ${esc(d.kind)}. This is an interaction model, not a circuit model.`}</p><details><summary>Source, assumptions & notes</summary><p>${esc(d.source)}</p><p>${esc(d.notes)}</p>${d.provenance?`<p>Source facts: ${esc((d.provenance.facts||[]).join('; ')||'None recorded')}<br>Assumptions: ${esc((d.provenance.assumptions||[]).join('; ')||'Review definition notes')}</p>`:''}</details><div class="actions">${btn('Close','close')}${btn('Place component','place-preview','primary',`data-id="${esc(d.id)}"`)}</div>`,{large:true});
 }
 function objectList(q) {
   return objects(app.panel).filter(o => `${o.ref || ''} ${o.label || o.text || o.type}`.toLowerCase().includes(q.toLowerCase())).map(o => `<button class="object-row ${app.selection.includes(o.id) ? 'active' : ''}" data-action="select-object" data-id="${o.id}" aria-pressed="${app.selection.includes(o.id)}"><span class="ref">${esc(o.ref || 'ART')}</span><span>${o.locked ? '▣ ' : ''}${esc(o.label || o.text || o.type || o.definition.name)}</span></button>`).join('') || '<div class="empty"><strong>Your blank canvas.</strong>Add a component to begin.</div>';
@@ -545,7 +565,7 @@ function definitionDialog(c = null) {
     const s = d[k];
     return `<h3>${k === 'front' ? 'Front face' : k === 'rear' ? 'Rear body' : 'Access envelope'}</h3>${fields(mf('Shape', k + 'Type', s.type, 'select', options(['circle', 'rect'], s.type)) + mf('Diameter / width (mm)', k + 'W', s.d || s.w, 'number') + mf('Height (mm)', k + 'H', s.h || s.d, 'number') + mf('Corner radius (mm)', k + 'R', s.r || 0, 'number'))}`;
   };
-  modal(c ? 'Edit embedded part definition' : 'Create custom part', `<p>Changes affect this project instance only. Save to the library explicitly to reuse it.</p><div class="def-grid"><div>${mf('Part name', 'name', d.name)}${fields(mf('Behavior', 'kind', d.kind, 'select', options(['button', 'toggle', 'encoder', 'pot', 'led', 'display', 'connector', 'mount'], d.kind)) + mf('Reference prefix', 'prefix', d.prefix))}${shapeInputs('front')}${shapeInputs('rear')}${shapeInputs('access')}</div><div>${fields(mf('Rear depth (mm)', 'depth', d.depth, 'number') + mf('Cable bend allowance (mm)', 'bend', d.bend, 'number') + mf('Min panel thickness (mm)', 'minThickness', d.minThickness, 'number') + mf('Max panel thickness (mm)', 'maxThickness', d.maxThickness, 'number'))}${mf('Mounting reference', 'mountReference', d.mountReference)}<h3>Openings / hole pattern</h3><p>Coordinates are relative to the mounting reference. Circle: d. Rectangle / rounded slot: w, h, r. All values in mm.</p><div class="table-wrap definition-table"><table><thead><tr><th>Shape</th><th>X mm</th><th>Y mm</th><th>Ø / W mm</th><th>H mm</th><th>R mm</th><th></th></tr></thead><tbody id="openingRows">${openingRows(d.openings)}</tbody></table></div><details><summary>Advanced geometry JSON</summary>${mf('Opening geometry JSON', 'openings', JSON.stringify(d.openings, null, 2), 'textarea')}${btn('Apply JSON to table', 'opening-json', 'small')}</details><div class="row">${btn('+ Circle', 'hole-circle', 'small')}${btn('+ Slot', 'hole-slot', 'small')}${btn('Import SVG', 'hole-import', 'small')}</div><h3>Terminals</h3><div class="table-wrap definition-table"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Volts</th><th>Required</th><th></th></tr></thead><tbody id="terminalRows">${terminalRows(d.terminals)}</tbody></table></div>${btn('+ Terminal', 'add-terminal', 'small')}<input type="hidden" name="terminals" value="table"><p class="help-text">Names are editable; stable IDs keep wiring attached when names change.</p></div></div><div class="section">${mf('Dimension source / measurements', 'source', d.source)}${fields(mf('Verification date', 'verifiedDate', d.verifiedDate, 'date') + mf('Notes', 'notes', d.notes || ''))}<label class="checkline"><input name="verified" type="checkbox" ${d.verified ? 'checked' : ''}> Dimensions measured / verified against this source</label></div>`, {
+  modal(c ? 'Edit embedded part definition' : 'Create custom part', `<p>Changes affect this project instance only. Save to the library explicitly to reuse it.</p><div class="def-grid"><div>${mf('Part name', 'name', d.name)}${mf('Catalog category', 'category', partCategory(d), 'select', options(categories,partCategory(d)))}${mf('Search tags (comma separated)', 'tags', (d.tags||[]).join(', '))}${fields(mf('Behavior', 'kind', d.kind, 'select', options(['button', 'toggle', 'encoder', 'pot', 'led', 'display', 'connector', 'mount'], d.kind)) + mf('Reference prefix', 'prefix', d.prefix))}${shapeInputs('front')}${shapeInputs('rear')}${shapeInputs('access')}</div><div>${fields(mf('Rear depth (mm)', 'depth', d.depth, 'number') + mf('Cable bend allowance (mm)', 'bend', d.bend, 'number') + mf('Min panel thickness (mm)', 'minThickness', d.minThickness, 'number') + mf('Max panel thickness (mm)', 'maxThickness', d.maxThickness, 'number'))}${mf('Mounting reference', 'mountReference', d.mountReference)}<h3>Openings / hole pattern</h3><p>Coordinates are relative to the mounting reference. Circle: d. Rectangle / rounded slot: w, h, r. All values in mm.</p><div class="table-wrap definition-table"><table><thead><tr><th>Shape</th><th>X mm</th><th>Y mm</th><th>Ø / W mm</th><th>H mm</th><th>R mm</th><th></th></tr></thead><tbody id="openingRows">${openingRows(d.openings)}</tbody></table></div><details><summary>Advanced geometry JSON</summary>${mf('Opening geometry JSON', 'openings', JSON.stringify(d.openings, null, 2), 'textarea')}${btn('Apply JSON to table', 'opening-json', 'small')}</details><div class="row">${btn('+ Circle', 'hole-circle', 'small')}${btn('+ Slot', 'hole-slot', 'small')}${btn('Import SVG', 'hole-import', 'small')}</div><h3>Terminals</h3><div class="table-wrap definition-table"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Volts</th><th>Required</th><th></th></tr></thead><tbody id="terminalRows">${terminalRows(d.terminals)}</tbody></table></div>${btn('+ Terminal', 'add-terminal', 'small')}<input type="hidden" name="terminals" value="table"><p class="help-text">Names are editable; stable IDs keep wiring attached when names change.</p></div></div><div class="section">${mf('Dimension source / measurements', 'source', d.source)}${fields(mf('Verification date', 'verifiedDate', d.verifiedDate, 'date') + mf('Notes', 'notes', d.notes || ''))}<label class="checkline"><input name="verified" type="checkbox" ${d.verified ? 'checked' : ''}> Dimensions measured / verified against this source</label></div>`, {
     large: true,
     form: 'definition',
     submit: c ? 'Update this part' : 'Create part'
@@ -975,6 +995,15 @@ async function action(name, el) {
       }
     case 'add-part':
       return addPart(id);
+    case 'part-details': return partDetails(id);
+    case 'place-preview': close(); return addPart(id);
+    case 'catalog-more': {const next=catalogMatches()[app.catalog.limit]?.id;app.catalog.limit+=24;refreshCatalog();$$('[data-action="add-part"]').find(e=>e.dataset.id===next)?.focus();return;}
+    case 'catalog-reset': app.catalog={query:'',category:'all',source:'all',limit:24};renderLeft();$('#partSearch').focus();return;
+    case 'part-favorite': {
+      const saved=new Set(app.prefs.favoriteParts);saved.has(id)?saved.delete(id):saved.add(id);
+      app.prefs.favoriteParts=[...saved];await prefsSave();refreshCatalog();
+      ($$('[data-action="part-favorite"]').find(e=>e.dataset.id===id)||$('#partSource')).focus();return;
+    }
     case 'select-object':
       {
         const o = objects(app.panel).find(o => o.id === id);
@@ -1384,6 +1413,8 @@ async function submit(form) {
         const d = clone(definitionDraft);
         Object.assign(d, {
           name: v.name,
+          category: v.category || partCategory(d),
+          tags: v.tags === undefined ? (d.tags || []) : v.tags.split(',').map(t=>t.trim()).filter(Boolean),
           kind: v.kind,
           prefix: v.prefix || 'C',
           mountReference: v.mountReference,
@@ -1608,7 +1639,7 @@ document.addEventListener('submit', e => {
 });
 document.addEventListener('input', e => {
   const el = e.target;
-  if (el.id === 'partSearch') $('#partGrid').innerHTML = partsHTML(el.value);
+  if (el.id === 'partSearch') {app.catalog.query=el.value;refreshCatalog(true);}
   if (el.id === 'objectSearch') $('#objectList').innerHTML = objectList(el.value);
   if (el.id === 'wireSearch') $('#wireBody').innerHTML = wireTable(el.value);
   if (el.id === 'commandSearch') commandMenu(el.value);
@@ -1625,6 +1656,7 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => {
   try {
     const el = e.target;
+    if(el.id==='partCategory'||el.id==='partSource') {app.catalog[el.id==='partCategory'?'category':'source']=el.value;refreshCatalog(true);return;}
     if (el.dataset.opening) {
       definitionDraft.openings[Number(el.dataset.index)][el.dataset.opening]=Number(el.value);
       $('#m-openings').value=JSON.stringify(definitionDraft.openings,null,2); return;
@@ -2044,6 +2076,7 @@ async function boot() {
       storageOK = true;
       const [prefs, last, custom, history] = await Promise.all([store.read('settings', 'preferences'), store.read('settings', 'last'), store.read('library', 'custom'), store.all('history')]);
       if (prefs?.value) Object.assign(app.prefs, prefs.value);
+      if(!Array.isArray(app.prefs.favoriteParts))app.prefs.favoriteParts=[];
       if (custom?.parts) app.library.push(...custom.parts.map(validateDefinition));
       app.history = history;
       if (last?.value) {

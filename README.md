@@ -2,13 +2,13 @@
 
 **Give your contraption a face.** A self-hosted, local-first Field Instrument for physical interface design.
 
-Version **1.3.0-rc.1** · Project schema **3** · GNU GPL v3 only.
+Version **1.4.0-rc.1** · Project schema **3** · GNU GPL v3 only.
 
-This is a functional release candidate, not the final verified v1.3. The model, interface logic and export pipeline pass 50 automated checks. The original browser preview was blocked; this environment currently has no supported browser-control workflow. Real browser interaction, responsive screenshots, IndexedDB persistence and offline reload remain release gates. See `docs/QA.md` for precisely what was and was not tested.
+This is a functional release candidate, not the final verified v1.4. The model, interface logic and export pipeline pass 57 automated checks. The original browser preview was blocked; this environment currently has no supported browser-control workflow. Real browser interaction, responsive screenshots, IndexedDB persistence and offline reload remain release gates. See `docs/QA.md` for precisely what was and was not tested.
 
 ## Launch on your server
 
-1. Extract **INTERFACEBENCH-v1.3.0-rc.1-server.zip**.
+1. Extract **INTERFACEBENCH-v1.4.0-rc.1-server.zip**.
 2. Copy **all extracted files and folders** to the server directory for `https://mbparks.com/interfacebench/`.
 3. Open that URL with the trailing slash. Choose **New panel**, **Explore an example**, or **Open project**.
 
@@ -42,6 +42,10 @@ On Windows, `py -m http.server 8000` may be the available command. Open `http://
 The panel design and fabrication workflow does not depend on completing electronics or rehearsal.
 
 ## Components
+
+**267 components across 14 categories**, including 255 additions in v1.4: pushbuttons, selectors, rotary controls, faders/joysticks, indicators, displays, audio/data connectors, power/protection, sensors, cable entries, fasteners, ventilation and module carriers. 265 generic planning templates and 2 manufacturer-sourced parts. See `docs/COMPONENT-CATALOG.md` or open `CATALOG.html` in the server package.
+
+Use category/source filters, multi-word search, favorites, and Details before placement. Examples: `USB type C`, `fader 100`, `MIDI`, `M3 standoff 20`. Show more expands 24 matches at a time. Filters survive placement; favorites are saved with workspace preferences. Custom part category and tags are editable.
 
 Starter parts are **illustrative and dimensionally unverified**. Measure the actual hardware before fabrication. A component owns its front face, openings, rear body, access envelope, mounting limits, depth, cable allowance, label, terminals and behavior type. Projects embed their definitions. Saving/importing a library never silently updates placed components.
 

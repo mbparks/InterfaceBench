@@ -15,3 +15,7 @@ Only the listed manufacturer facts are transcribed. Rear/access envelopes, cable
 SVG affine semantics: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/transform . Arc conversion follows SVG endpoint-to-centre geometry and uses cubic segments of at most22.5°. Artwork is normalized to monochrome shapes; source CSS/paint effects are not reproduced.
 
 Companion formats were inspected from PINNOTE-v2.0.0-github.zip, COPPERBENCH-v1.7.1.html and REFLEX-v1.1.0-rc.1.html supplied through the user's saved project artifacts. See INTERCHANGE.md and the recorded module hashes.
+
+## v1.4 generic catalog expansion
+
+The 255 additional definitions in `component-library.js` are authored illustrative planning geometry, not new sourced manufacturer footprints. They assert no measured dimensions, connector pinout, rating, board compatibility or protocol implementation. Family names and search tags aid discovery; inspect or measure the chosen hardware and replace approximated geometry before manufacturing. The existing two E-Switch drawing references above remain the only manufacturer-sourced component definitions.

@@ -1,3 +1,26 @@
+# Verification record — 1.4.0-rc.1
+
+Date: 2026-10-09. Tests use the copied server distribution. **57 automated tests pass** (`qa/v14-test-results.txt`): the prior 50 plus six catalog checks and one additional UI flow contract.
+
+- All 267 unique definitions validate, embed without mutating the catalog, survive project JSON round-trips, and export every opening through SVG. The original ten starter geometries/terminals are preserved, and the two sourced definitions retain their provenance.
+- All 255 new generic cut patterns have no sampled internal overlaps and stay within front-face bounds. Geometry thumbnails scale to their part dimensions. This validates template consistency, not compatibility with purchased hardware.
+- A fan pattern, long fader, D-sub connector and perforated vent pass actual PDF generation and frozen-ZIP round-trip checks.
+- Search exercises multi-word tags, dimensions, categories, sourced/custom/favorite scopes, no-match results and legacy metadata. The UI contract checks details without mutation, placement with preserved filters, undo, favorites and pagination.
+- Optional metadata rejects malformed tags and unsupported visuals; the new module is included in the offline cache. The same 50 earlier tests still pass.
+
+Browser acceptance remains an open release gate. The Sites skill requires skipping browser QA without its supported control-browser skill and prohibits a substitute browser path. No actual UI layout, pointer, browser storage, offline reload or native download checks were run. The prepared browser journey includes the new catalog flow for a supported environment.
+
+## New browser acceptance checklist
+
+1. At desktop and phone widths, browse each category and inspect full names/dimensions in all three themes. Check scrolling and focus outlines.
+2. Search `USB type C`, inspect Details, favorite the part, place it twice, then undo. Confirm search/category remain selected.
+3. Filter Favorites, reload, and confirm the favorite is retained. Remove it and verify the empty state. Confirm no project-dirty state from favorites alone.
+4. Use only the keyboard to change filters, open/close Details, add a favorite, load more and place a component. Confirm focus remains useful.
+5. Save, reload, export/reimport projects containing multi-hole templates, and edit/save a custom category and tags.
+6. Load once online, reload offline, browse all categories and open Full catalog. Exercise the explicit service-worker update with an older project present.
+
+## Previous release evidence (historical)
+
 # Verification record — 1.3.0-rc.1
 
 Date:2026-10-09. Node24.19.0/Linux x64. Tests import the same modules copied into the server distribution.
