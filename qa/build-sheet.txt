@@ -1,0 +1,82 @@
+INTERFACEBENCH 1.3.0-rc.1
+Kinetic sculpture — Revision A
+
+FABRICATION
+Front orientation; +X right / +Y down. Every panel uses its declared origin across SVG outputs.
+Check dimensions on actual hardware. Generic part definitions are unverified.
+Print PDF at 100%; measure its 20 mm calibration square.
+
+PANELS
+Operator panel: 280 x 180 x 4 mm, Birch plywood, Laser cut + UV print; 65 mm rear depth
+
+COMPONENTS / QUANTITIES
+Operator panel
+1 x I²C display: DS1
+1 x Momentary button: SW1
+1 x Stop button: SW2
+1 x Potentiometer: RV1
+1 x Toggle switch: SW3
+1 x Panel indicator: LED1
+1 x Panel connector: J1
+4 x Mounting hole: H1, H2, H3, H4
+Mounting holes are geometry only: select suitable screws, washers, nuts and spacers for actual material and thickness.
+
+FINDINGS (13)
+[WARNING / unknown] DS1: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] SW1: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] SW2: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] RV1: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] SW3: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] LED1: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] J1: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] H1: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] H2: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] H3: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / unknown] H4: unverified dimensions
+This embedded part definition is illustrative or lacks a measurement record.
+Action: Measure the actual part, record evidence and confirm the definition.
+
+[WARNING / low] Access envelopes: DS1 / J1
+Conservative 2D bounding boxes overlap; fingers, tools or connectors may compete for space.
+Action: Review physical access and record any accepted overlap.
+
+[INFO / low] Artwork may meet an opening
+Conservative bounding boxes intersect. Tick scales surrounding knobs can trigger this check.
+Action: Inspect intended artwork placement; acknowledge intentional surrounds.
+
+ASSUMPTIONS
+All generic component dimensions are illustrative. Confirm openings, rear bodies and mounting thickness against actual parts.
+Motor connector is a mechanical placeholder. External motor driver, power supply and protective circuits are outside this panel prototype.
+
+EVIDENCE
+UNO R3 capabilities transcribed from Arduino product datasheet, checked 2026-10-08. https://docs.arduino.cc/resources/datasheets/A000066-datasheet.pdf

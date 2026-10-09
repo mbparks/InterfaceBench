@@ -1,0 +1,36 @@
+✔ both examples validate; JSON round trip is lossless (9.303342ms)
+✔ units remain canonical: 1/2 inch = 12.7 mm; field suffixes and invalid values (1.547339ms)
+✔ front/rear fixture: (25,40) on 100 mm panel -> (75,40), involutive (0.227834ms)
+✔ rotated geometry fixture has exact expected bounds (1.539778ms)
+✔ SVG dimensions, layers, exact circular cut fixture, explicit allowance (1.252353ms)
+✔ text is outlined and unsupported glyphs report a failure (12.591387ms)
+✔ embedding definitions isolates existing projects from library updates (0.819418ms)
+✔ diagnostic example triggers physical and electrical conflicts (24.960318ms)
+✔ clean illustrative example has no error finding; warnings remain visible (22.607882ms)
+✔ shared I2C and power allowed; exclusive digital duplicates rejected (34.817437ms)
+✔ rehearsal deterministic, resettable, does not mutate project (1.087574ms)
+✔ fingerprints exclude display-layer visibility and lock state (3.156821ms)
+✔ export history and selection are not part of project model; baselines excluded from fabrication fingerprints (4.268432ms)
+✔ schema 1 migrates; malformed/future/prototype inputs reject non-destructively (2.258814ms)
+✔ restricted path parser supports relative straight geometry and rejects unsupported paths (0.490992ms)
+✔ CSV quoted fields and formula injection, Arduino safe unique identifiers (16.597037ms)
+✔ PDF A4 tiling, true-size MediaBox and frozen ZIP snapshot (226.676147ms)
+✔ successful save and load increment generation; snapshots retain last good state (3.780679ms)
+✔ interrupted and quota-failed writes leave previous save intact (2.998658ms)
+✔ second writer cannot overwrite an unseen newer generation (1.704765ms)
+✔ recovery storage is bounded to ten previous successful saves (10.803979ms)
+✔ app boots and renders welcome without storage, using an explicit backup-needed status (1.327707ms)
+✔ example render produces canvas, library, inspector; precise edit, duplicate, rotate and undo retain model (144.367525ms)
+✔ numeric edit validates and unit display changes never mutate dimensions (23.49981ms)
+✔ every main stage renders and rehearsal leaves geometry unchanged (28.660451ms)
+✔ custom definition dialog actually contains dimension and terminals controls (2.301569ms)
+✔ malformed project import does not replace current project; imported baseline survives (19.534497ms)
+✔ locks protect numeric fields, transforms and deletion; multi-selection arrangement works (57.814367ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1002.786854

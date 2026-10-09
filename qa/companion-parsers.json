@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-09T15:02:37.255Z",
+  "runtime": "v24.19.0",
+  "passed": true,
+  "checks": [
+    "PINNOTE 2.0.0 native parser accepts export unchanged",
+    "PINNOTE parsed export round-trips assignments exactly",
+    "REFLEX 1.1.0-rc.1 native parser accepts schema5 inventory unchanged",
+    "COPPERBENCH 1.7.1 validator accepts native fixture; mounting holes imported"
+  ],
+  "sourceFiles": [
+    {
+      "name": "pinnote/src/core.js",
+      "sha256": "b43678052ba6f17bddcc103a6bde671d1d91f5e5b422c78e50e7b9600eac7df0"
+    },
+    {
+      "name": "reflex-0.js",
+      "sha256": "2cbbfdc2334ab8e2c7e37d0663ab55048d6235e1c54ddaedf455d1aa62a0932b"
+    },
+    {
+      "name": "reflex-1.js",
+      "sha256": "340bb951f768403b9fac745b3959b2945886ab5fda5355e6b8a4a06233c6daf4"
+    },
+    {
+      "name": "reflex-2.js",
+      "sha256": "eeb2e9659baefec7530a3a4ab2f3b1d979864808ec563f7b9fd081cd92709861"
+    },
+    {
+      "name": "reflex-3.js",
+      "sha256": "446ba7fafde2d7b2efdbfa10d164c8233b6e397aa2e609e68ae550eda49d3f10"
+    },
+    {
+      "name": "copperbench-2.js",
+      "sha256": "e4c1b9231a0b5adbca183783015fc1ddfd5469f8e1102049e4374c33c0ddbbf0"
+    }
+  ],
+  "browser": false
+}

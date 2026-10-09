@@ -1,0 +1,25 @@
+{
+  "checked": "2026-10-09T14:59:38.430628+00:00",
+  "source": "dimensional-fixture.pdf",
+  "sha256": "628bc2c9eb28b93d43c7d27659364d2e589217ffd9993afabed2a41090241ac5",
+  "expectedOpeningBoundsMm": [
+    30,
+    52,
+    40,
+    62
+  ],
+  "measuredOpeningBoundsMm": [
+    30.00000184377034,
+    52.00000211927625,
+    40.000002458360456,
+    62.00000004238552
+  ],
+  "maxErrorMm": 2.4583604556482896e-06,
+  "calibrationSquare20mm": true,
+  "pageMm": [
+    119.99999660915798,
+    141.99999957614475
+  ],
+  "passed": true,
+  "physicalPrintTest": false
+}

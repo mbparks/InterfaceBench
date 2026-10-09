@@ -1,0 +1,48 @@
+{
+  "environment": "v24.19.0 / linux / x64",
+  "browser": "Not run: no supported browser-control workflow in this managed environment",
+  "components": 100,
+  "artwork": 200,
+  "measurements": {
+    "validate-and-clone": {
+      "medianMs": 2.3,
+      "runsMs": [
+        2.07,
+        2.09,
+        2.3,
+        2.46,
+        7
+      ]
+    },
+    "checks": {
+      "medianMs": 114.35,
+      "runsMs": [
+        89.06,
+        92.99,
+        114.35,
+        124.23,
+        124.83
+      ]
+    },
+    "svg-export": {
+      "medianMs": 16.96,
+      "runsMs": [
+        15.67,
+        16.46,
+        16.96,
+        18.73,
+        18.75
+      ]
+    },
+    "pdf-export": {
+      "medianMs": 156.23,
+      "runsMs": [
+        145.62,
+        147.96,
+        156.23,
+        164.43,
+        169.8
+      ]
+    }
+  }
+}

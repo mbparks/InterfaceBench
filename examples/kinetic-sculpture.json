@@ -1,0 +1,1417 @@
+{
+  "app": "INTERFACEBENCH",
+  "schema": 3,
+  "id": "936bd0df-0fbf-4045-bd08-673c34fd6af3",
+  "name": "Kinetic sculpture",
+  "revision": "A",
+  "panels": [
+    {
+      "id": "fe1e5c05-1a49-41d9-a0f5-938506e0dafd",
+      "name": "Operator panel",
+      "w": 280,
+      "h": 180,
+      "shape": "rounded",
+      "radius": 5,
+      "thickness": 4,
+      "material": "Birch plywood",
+      "process": "Laser cut + UV print",
+      "depth": 65,
+      "edge": 3,
+      "origin": "top-left",
+      "color": "#b49365",
+      "outline": [],
+      "components": [
+        {
+          "id": "ffb56128-21a8-43d2-9e2c-ad70b8212cd0",
+          "ref": "DS1",
+          "label": "MOTION / STATUS",
+          "definition": {
+            "id": "display",
+            "name": "I²C display",
+            "kind": "display",
+            "front": {
+              "type": "rect",
+              "x": 0,
+              "y": 0,
+              "w": 51,
+              "h": 24,
+              "r": 2
+            },
+            "openings": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 46,
+                "h": 18,
+                "r": 0
+              }
+            ],
+            "rear": {
+              "type": "rect",
+              "x": 0,
+              "y": 0,
+              "w": 59,
+              "h": 29,
+              "r": 0
+            },
+            "access": {
+              "type": "rect",
+              "x": 0,
+              "y": 0,
+              "w": 65,
+              "h": 35,
+              "r": 0
+            },
+            "depth": 17,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [
+              {
+                "id": "SDA",
+                "name": "SDA",
+                "role": "SDA",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "SCL",
+                "name": "SCL",
+                "role": "SCL",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "VCC",
+                "name": "VCC",
+                "role": "power",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "GND",
+                "name": "GND",
+                "role": "ground",
+                "voltage": 5,
+                "required": true
+              }
+            ],
+            "prefix": "DS",
+            "color": "#24342d",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 193,
+          "y": 49,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 19,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#24342d",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "dafd59dd-1b59-4ab0-8681-619e1b052542",
+          "ref": "SW1",
+          "label": "RUN",
+          "definition": {
+            "id": "button",
+            "name": "Momentary button",
+            "kind": "button",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 18
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 12
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 16
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 27
+            },
+            "depth": 24,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [
+              {
+                "id": "SIG",
+                "name": "SIG",
+                "role": "digitalIn",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "GND",
+                "name": "GND",
+                "role": "ground",
+                "voltage": 5,
+                "required": true
+              }
+            ],
+            "prefix": "SW",
+            "color": "#79ac8c",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 54,
+          "y": 111,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 16,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#79ac8c",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "d056969f-b90b-47d2-9f77-a09b5b18b5a3",
+          "ref": "SW2",
+          "label": "STOP",
+          "definition": {
+            "id": "stop",
+            "name": "Stop button",
+            "kind": "button",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 24
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 16
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 22
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 34
+            },
+            "depth": 28,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [
+              {
+                "id": "SIG",
+                "name": "SIG",
+                "role": "digitalIn",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "GND",
+                "name": "GND",
+                "role": "ground",
+                "voltage": 5,
+                "required": true
+              }
+            ],
+            "prefix": "SW",
+            "color": "#d36c57",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 104,
+          "y": 111,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 19,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#d36c57",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "22c81c67-0d63-4097-810e-e53171656dea",
+          "ref": "RV1",
+          "label": "SPEED",
+          "definition": {
+            "id": "pot",
+            "name": "Potentiometer",
+            "kind": "pot",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 27
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 7
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 21
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 34
+            },
+            "depth": 22,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [
+              {
+                "id": "WIPER",
+                "name": "WIPER",
+                "role": "analogIn",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "VCC",
+                "name": "VCC",
+                "role": "power",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "GND",
+                "name": "GND",
+                "role": "ground",
+                "voltage": 5,
+                "required": true
+              }
+            ],
+            "prefix": "RV",
+            "color": "#d8ddcb",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 177,
+          "y": 112,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 20.5,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#d8ddcb",
+          "value": 50,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "17a7c84c-0b43-4e51-b933-dfc5a36f8401",
+          "ref": "SW3",
+          "label": "ARM",
+          "definition": {
+            "id": "toggle",
+            "name": "Toggle switch",
+            "kind": "toggle",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 13
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 6
+              }
+            ],
+            "rear": {
+              "type": "rect",
+              "x": 0,
+              "y": 0,
+              "w": 12,
+              "h": 20,
+              "r": 0
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 25
+            },
+            "depth": 22,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [
+              {
+                "id": "SIG",
+                "name": "SIG",
+                "role": "digitalIn",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "GND",
+                "name": "GND",
+                "role": "ground",
+                "voltage": 5,
+                "required": true
+              }
+            ],
+            "prefix": "SW",
+            "color": "#c8ced0",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 54,
+          "y": 52,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 13.5,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#c8ced0",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "ffc44502-6c78-4e5f-9e71-77001f13b89c",
+          "ref": "LED1",
+          "label": "ACTIVE",
+          "definition": {
+            "id": "led",
+            "name": "Panel indicator",
+            "kind": "led",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 9
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 8
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 8
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 14
+            },
+            "depth": 15,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [
+              {
+                "id": "ANODE",
+                "name": "ANODE",
+                "role": "digitalOut",
+                "voltage": 5,
+                "required": true
+              },
+              {
+                "id": "GND",
+                "name": "GND",
+                "role": "ground",
+                "voltage": 5,
+                "required": true
+              }
+            ],
+            "prefix": "LED",
+            "color": "#c2ee84",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 241,
+          "y": 112,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 11.5,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#c2ee84",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "32195d97-b834-4603-ac0e-bcd59d4faf7c",
+          "ref": "J1",
+          "label": "MOTOR",
+          "definition": {
+            "id": "connector",
+            "name": "Panel connector",
+            "kind": "connector",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 20
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 16
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 19
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 30
+            },
+            "depth": 27,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [
+              {
+                "id": "P1",
+                "name": "P1",
+                "role": "passive",
+                "voltage": 0,
+                "required": false
+              },
+              {
+                "id": "P2",
+                "name": "P2",
+                "role": "passive",
+                "voltage": 0,
+                "required": false
+              },
+              {
+                "id": "P3",
+                "name": "P3",
+                "role": "passive",
+                "voltage": 0,
+                "required": false
+              }
+            ],
+            "prefix": "J",
+            "color": "#777d77",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 237,
+          "y": 49,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 17,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#777d77",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "8a97a82d-7d81-43e3-99d7-ecd784a9e7a3",
+          "ref": "H1",
+          "label": "",
+          "definition": {
+            "id": "mount",
+            "name": "Mounting hole",
+            "kind": "mount",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 3.2
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 10
+            },
+            "depth": 6,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [],
+            "prefix": "H",
+            "color": "#adb1a7",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 9,
+          "y": 9,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 10.5,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#adb1a7",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "e9fe4ce4-240d-4fef-b7a1-1eff4bdf1f13",
+          "ref": "H2",
+          "label": "",
+          "definition": {
+            "id": "mount",
+            "name": "Mounting hole",
+            "kind": "mount",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 3.2
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 10
+            },
+            "depth": 6,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [],
+            "prefix": "H",
+            "color": "#adb1a7",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 271,
+          "y": 9,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 10.5,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#adb1a7",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "21194ec1-7a38-4488-ae0f-427d8f614492",
+          "ref": "H3",
+          "label": "",
+          "definition": {
+            "id": "mount",
+            "name": "Mounting hole",
+            "kind": "mount",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 3.2
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 10
+            },
+            "depth": 6,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [],
+            "prefix": "H",
+            "color": "#adb1a7",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 9,
+          "y": 171,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 10.5,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#adb1a7",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        },
+        {
+          "id": "80c2bb93-4057-4e6d-99d9-af71aaed0f77",
+          "ref": "H4",
+          "label": "",
+          "definition": {
+            "id": "mount",
+            "name": "Mounting hole",
+            "kind": "mount",
+            "front": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "openings": [
+              {
+                "type": "circle",
+                "x": 0,
+                "y": 0,
+                "d": 3.2
+              }
+            ],
+            "rear": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 7
+            },
+            "access": {
+              "type": "circle",
+              "x": 0,
+              "y": 0,
+              "d": 10
+            },
+            "depth": 6,
+            "bend": 0,
+            "minThickness": 0,
+            "maxThickness": 8,
+            "mountReference": "Opening centre",
+            "terminals": [],
+            "prefix": "H",
+            "color": "#adb1a7",
+            "verified": false,
+            "source": "Illustrative generic part — measure your actual hardware",
+            "verifiedDate": "",
+            "notes": "Nominal dimensions are illustrative; not manufacturer specifications."
+          },
+          "x": 271,
+          "y": 171,
+          "rotation": 0,
+          "locked": false,
+          "group": null,
+          "labelX": 0,
+          "labelY": 10.5,
+          "labelSize": 3,
+          "layer": "engrave",
+          "color": "#adb1a7",
+          "value": 0,
+          "display": "READY",
+          "notes": ""
+        }
+      ],
+      "artwork": [
+        {
+          "id": "4da2c01a-fedb-4fed-9fea-11e3564aea57",
+          "type": "text",
+          "text": "KINETIC / 01",
+          "x": 20,
+          "y": 25,
+          "size": 6,
+          "color": "#283930",
+          "layer": "uv",
+          "rotation": 0
+        },
+        {
+          "id": "d92e5a33-281a-4839-a87a-8fa6a344a269",
+          "type": "text",
+          "text": "A SMALL MACHINE FOR UNEXPECTED MOVEMENT",
+          "x": 20,
+          "y": 158,
+          "size": 2.6,
+          "color": "#394336",
+          "layer": "uv",
+          "rotation": 0
+        },
+        {
+          "id": "2f6912c0-1ba8-474c-8b67-802b2e058fe8",
+          "type": "line",
+          "x": 20,
+          "y": 76,
+          "w": 240,
+          "h": 0,
+          "stroke": 0.35,
+          "color": "#4c5942",
+          "layer": "uv",
+          "rotation": 0
+        },
+        {
+          "id": "e2bf7a0e-9381-43e7-9115-bb01bc423361",
+          "type": "border",
+          "x": 193,
+          "y": 49,
+          "w": 65,
+          "h": 35,
+          "r": 2,
+          "stroke": 0.5,
+          "color": "#5b6559",
+          "layer": "reference",
+          "rotation": 0
+        },
+        {
+          "id": "ba8a52d2-09d4-4faf-8041-62de53f1a014",
+          "type": "rotary",
+          "x": 177,
+          "y": 112,
+          "r": 21,
+          "count": 11,
+          "start": -135,
+          "end": 135,
+          "stroke": 0.4,
+          "color": "#2d4131",
+          "layer": "engrave",
+          "rotation": 0
+        }
+      ],
+      "layers": {
+        "outline": {
+          "visible": true,
+          "locked": false,
+          "export": true
+        },
+        "cut": {
+          "visible": true,
+          "locked": false,
+          "export": true
+        },
+        "engrave": {
+          "visible": true,
+          "locked": false,
+          "export": true
+        },
+        "uv": {
+          "visible": true,
+          "locked": false,
+          "export": true
+        },
+        "overlay": {
+          "visible": true,
+          "locked": false,
+          "export": true
+        },
+        "registration": {
+          "visible": true,
+          "locked": false,
+          "export": true
+        },
+        "reference": {
+          "visible": true,
+          "locked": false,
+          "export": false
+        }
+      }
+    }
+  ],
+  "controller": {
+    "name": "Arduino UNO R3",
+    "source": "https://docs.arduino.cc/resources/datasheets/A000066-datasheet.pdf",
+    "verifiedDate": "2026-10-08",
+    "pins": [
+      {
+        "id": "D0",
+        "code": "0",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "RX"
+        ]
+      },
+      {
+        "id": "D1",
+        "code": "1",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "TX"
+        ]
+      },
+      {
+        "id": "D2",
+        "code": "2",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "D3",
+        "code": "3",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "pwm"
+        ]
+      },
+      {
+        "id": "D4",
+        "code": "4",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "D5",
+        "code": "5",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "pwm"
+        ]
+      },
+      {
+        "id": "D6",
+        "code": "6",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "pwm"
+        ]
+      },
+      {
+        "id": "D7",
+        "code": "7",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "D8",
+        "code": "8",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "D9",
+        "code": "9",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "pwm"
+        ]
+      },
+      {
+        "id": "D10",
+        "code": "10",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "pwm",
+          "CS"
+        ]
+      },
+      {
+        "id": "D11",
+        "code": "11",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "pwm",
+          "MOSI"
+        ]
+      },
+      {
+        "id": "D12",
+        "code": "12",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "MISO"
+        ]
+      },
+      {
+        "id": "D13",
+        "code": "13",
+        "voltage": 5,
+        "caps": [
+          "digitalIn",
+          "digitalOut",
+          "SCK"
+        ]
+      },
+      {
+        "id": "A0",
+        "code": "A0",
+        "voltage": 5,
+        "caps": [
+          "analogIn",
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "A1",
+        "code": "A1",
+        "voltage": 5,
+        "caps": [
+          "analogIn",
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "A2",
+        "code": "A2",
+        "voltage": 5,
+        "caps": [
+          "analogIn",
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "A3",
+        "code": "A3",
+        "voltage": 5,
+        "caps": [
+          "analogIn",
+          "digitalIn",
+          "digitalOut"
+        ]
+      },
+      {
+        "id": "A4",
+        "code": "A4",
+        "voltage": 5,
+        "caps": [
+          "analogIn",
+          "digitalIn",
+          "digitalOut",
+          "SDA"
+        ]
+      },
+      {
+        "id": "A5",
+        "code": "A5",
+        "voltage": 5,
+        "caps": [
+          "analogIn",
+          "digitalIn",
+          "digitalOut",
+          "SCL"
+        ]
+      },
+      {
+        "id": "5V",
+        "code": "",
+        "voltage": 5,
+        "caps": [
+          "power"
+        ]
+      },
+      {
+        "id": "3V3",
+        "code": "",
+        "voltage": 3.3,
+        "caps": [
+          "power"
+        ]
+      },
+      {
+        "id": "GND",
+        "code": "",
+        "voltage": 0,
+        "caps": [
+          "ground"
+        ]
+      }
+    ]
+  },
+  "connections": [
+    {
+      "id": "ef0a659f-293d-4236-b122-f02855354a99",
+      "component": "dafd59dd-1b59-4ab0-8681-619e1b052542",
+      "terminal": "SIG",
+      "pin": "D2",
+      "signal": "SW1_SIG",
+      "bus": "",
+      "pullup": true,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "e2852172-5cdd-48f0-a3b1-d52d5f189423",
+      "component": "dafd59dd-1b59-4ab0-8681-619e1b052542",
+      "terminal": "GND",
+      "pin": "GND",
+      "signal": "SW1_GND",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "d39bd1ca-cfe2-497e-88c1-2bcad600056d",
+      "component": "d056969f-b90b-47d2-9f77-a09b5b18b5a3",
+      "terminal": "SIG",
+      "pin": "D3",
+      "signal": "SW2_SIG",
+      "bus": "",
+      "pullup": true,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "3f2abdb3-32b9-4faf-9ccb-6fcadbfc2bf5",
+      "component": "d056969f-b90b-47d2-9f77-a09b5b18b5a3",
+      "terminal": "GND",
+      "pin": "GND",
+      "signal": "SW2_GND",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "e8d5ef1c-a86a-4679-8c0b-fbcad707e2e3",
+      "component": "17a7c84c-0b43-4e51-b933-dfc5a36f8401",
+      "terminal": "SIG",
+      "pin": "D4",
+      "signal": "SW3_SIG",
+      "bus": "",
+      "pullup": true,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "26394c3e-7b6f-4d6e-9c31-119808ced607",
+      "component": "17a7c84c-0b43-4e51-b933-dfc5a36f8401",
+      "terminal": "GND",
+      "pin": "GND",
+      "signal": "SW3_GND",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "36912ecd-b6a2-41ce-b394-da979fccde42",
+      "component": "22c81c67-0d63-4097-810e-e53171656dea",
+      "terminal": "WIPER",
+      "pin": "A0",
+      "signal": "RV1_WIPER",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "79d32d83-f79b-4cad-88ee-756f6a0ac0cd",
+      "component": "22c81c67-0d63-4097-810e-e53171656dea",
+      "terminal": "VCC",
+      "pin": "5V",
+      "signal": "RV1_VCC",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "c647ecd8-c3b2-4abe-ad4a-0d21744c52c8",
+      "component": "22c81c67-0d63-4097-810e-e53171656dea",
+      "terminal": "GND",
+      "pin": "GND",
+      "signal": "RV1_GND",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "f6d2bb37-494e-47c3-a5cf-0c3105ce9011",
+      "component": "ffc44502-6c78-4e5f-9e71-77001f13b89c",
+      "terminal": "ANODE",
+      "pin": "D9",
+      "signal": "LED1_ANODE",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": "Series current-limiting resistor required"
+    },
+    {
+      "id": "5d717d6c-a0f7-4e00-ac3c-8720cd3e4654",
+      "component": "ffc44502-6c78-4e5f-9e71-77001f13b89c",
+      "terminal": "GND",
+      "pin": "GND",
+      "signal": "LED1_GND",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "f2a01cde-cad4-40ac-a74b-a4dbd868265d",
+      "component": "ffb56128-21a8-43d2-9e2c-ad70b8212cd0",
+      "terminal": "SDA",
+      "pin": "A4",
+      "signal": "DS1_SDA",
+      "bus": "I2C_SDA",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "c8548056-9ed0-486e-9f98-ffdc2c13c7e4",
+      "component": "ffb56128-21a8-43d2-9e2c-ad70b8212cd0",
+      "terminal": "SCL",
+      "pin": "A5",
+      "signal": "DS1_SCL",
+      "bus": "I2C_SCL",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "dbe2e075-aaec-4019-af2d-54f8e13f7688",
+      "component": "ffb56128-21a8-43d2-9e2c-ad70b8212cd0",
+      "terminal": "VCC",
+      "pin": "5V",
+      "signal": "DS1_VCC",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    },
+    {
+      "id": "fb83f917-aaa8-4902-8725-9ea67b286ddf",
+      "component": "ffb56128-21a8-43d2-9e2c-ad70b8212cd0",
+      "terminal": "GND",
+      "pin": "GND",
+      "signal": "DS1_GND",
+      "bus": "",
+      "pullup": false,
+      "activeLow": true,
+      "driver": "",
+      "notes": ""
+    }
+  ],
+  "variables": {
+    "run": 0,
+    "speed": 50
+  },
+  "rules": [
+    {
+      "id": "67a4b98d-5bc7-4608-a58c-eaa309d73184",
+      "source": "dafd59dd-1b59-4ab0-8681-619e1b052542",
+      "event": "press",
+      "op": "set",
+      "variable": "run",
+      "value": 1,
+      "min": 0,
+      "max": 1,
+      "target": "ffc44502-6c78-4e5f-9e71-77001f13b89c"
+    },
+    {
+      "id": "d9920193-c6f7-4aa8-83b9-64dc43ef39f5",
+      "source": "d056969f-b90b-47d2-9f77-a09b5b18b5a3",
+      "event": "press",
+      "op": "set",
+      "variable": "run",
+      "value": 0,
+      "min": 0,
+      "max": 1,
+      "target": "ffc44502-6c78-4e5f-9e71-77001f13b89c"
+    },
+    {
+      "id": "f3a68f5e-fd4c-47c4-a08f-b4c9fdcc26eb",
+      "source": "22c81c67-0d63-4097-810e-e53171656dea",
+      "event": "change",
+      "op": "map",
+      "variable": "speed",
+      "value": 0,
+      "min": 0,
+      "max": 100,
+      "target": "ffb56128-21a8-43d2-9e2c-ad70b8212cd0"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "a217a7fc-2f2d-485c-af14-db4e5ffc7034",
+      "target": "project",
+      "text": "All generic component dimensions are illustrative. Confirm openings, rear bodies and mounting thickness against actual parts."
+    },
+    {
+      "id": "224312b5-e97c-4cbd-91cd-fe26ab021278",
+      "target": "32195d97-b834-4603-ac0e-bcd59d4faf7c",
+      "text": "Motor connector is a mechanical placeholder. External motor driver, power supply and protective circuits are outside this panel prototype."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "c4463989-fa4d-4517-a25b-b8198ccba563",
+      "target": "controller",
+      "text": "UNO R3 capabilities transcribed from Arduino product datasheet, checked 2026-10-08.",
+      "source": "https://docs.arduino.cc/resources/datasheets/A000066-datasheet.pdf"
+    }
+  ],
+  "baselines": [],
+  "acknowledgments": {},
+  "assets": {},
+  "modified": "2026-10-09T14:59:36.422Z"
+}

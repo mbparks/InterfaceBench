@@ -1,0 +1,7 @@
+import fs from 'node:fs';import {example,clone,addComponent,newPanel,VERSION} from '../dist/js/model.js';import {manufacturerParts} from '../dist/js/catalog.js';import {validateProject} from '../dist/js/validation.js';import {svgExport,pdfExport} from '../dist/js/exports.js';import {setup} from '../tests/setup.mjs';setup();
+const p=example();p.name='Studio panel · v1.3';const a=p.panels[0].artwork.find(a=>a.type==='rotary');Object.assign(a,{labelMode:'numeric',labelMin:0,labelMax:10,labelEvery:2,labelDecimals:0,legendSize:2.4,legendGap:1,majorEvery:2,majorLength:3,minorLength:1.5});
+const b=newPanel('Manufacturer-sourced switch study');b.w=180;b.h=100;b.depth=60;b.thickness=4;p.panels.push(b);for(let i=0;i<manufacturerParts.length;i++){const c=addComponent(p,b,manufacturerParts[i],50+80*i,45);c.label=manufacturerParts[i].partNumber;c.labelSize=2.3;}
+p.assumptions.push({id:'sourced-study',target:b.id,text:'Manufacturer cutout/bezel dimensions are sourced; rear/access dimensions remain planning assumptions. Verify the purchased variant and use appropriate LED interfaces.'});validateProject(p);
+fs.writeFileSync('examples/studio-panel-v1.3.json',JSON.stringify(p,null,2));
+fs.writeFileSync('qa/v13-panel.svg',svgExport(p,p.panels[0]));fs.writeFileSync('qa/v13-sourced-parts.svg',svgExport(p,b));fs.writeFileSync('qa/v13-panel.pdf',await pdfExport(p,p.panels[0],{pdfMode:'sheet'}));
+console.log('Saved v1.3 studio fixture, SVG and PDF.');
