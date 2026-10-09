@@ -1,6 +1,7 @@
 import {exportPinnote,exportReflex,importCopperbench,importAssignments} from './interchange.js';
 import {controllerProfiles,revisionInfo,nextRevision,revisionChanges,assignmentImpact,mergeLibrary,libraryDocument} from './catalog.js';
 import {builtinParts,categories,partCategory,categoryLabel,sourceLabel,partSource,filterParts,shapeSummary,openingSummary} from './component-library.js';
+import {labelSides} from './model.js';
 import {openingRows, terminalRows} from './definition-editor.js';
 import { VERSION, SCHEMA, clone, uid, esc, layers, layerNames, roles, starterParts, newProject, newPanel, example, addComponent, parseUnit, formatUnit, objects, fingerprints, baselineDiff, designContent, stable, rect, circ, uno, instantiateDefinition } from './model.js';
 import { setFont, objectBounds, transform, mirror, boxesOverlap, flatten, commands, inside, scene } from './geometry.js';
@@ -260,6 +261,9 @@ function render() {
   $('#redo').disabled = !app.future.length;
   $('#front').classList.toggle('active', app.side === 'front');
   $('#rear').classList.toggle('active', app.side === 'rear');
+  for(const side of ['front','rear']){
+    const el=$('#labels-'+side);el.checked=labelSides(app.panel)[side];el.disabled=!!app.sim;
+  }
   $('#selectTool').classList.toggle('active', app.tool === 'select');
   $('#panTool').classList.toggle('active', app.tool === 'pan');
   $('#measureTool').classList.toggle('active', app.tool === 'measure');
@@ -326,7 +330,7 @@ function renderRight() {
     const o = selected[0];
     html = `<div class="eyebrow">${o.definition ? 'COMPONENT / ' + esc(o.definition.kind) : 'ARTWORK / ' + esc(o.type)}</div><div class="inspector-title"><h2>${esc(o.ref || o.type)}</h2><span class="pill">${o.locked ? 'LOCKED' : 'SELECTED'}</span></div><p class="subtitle">${esc(o.definition?.name || 'Edit geometry and fabrication intent')}</p>${fields(field('X position', 'object.x', unit(o.x)) + field('Y position', 'object.y', unit(o.y)) + field('Rotation °', 'object.rotation', o.rotation, 'number') + (o.definition ? field('Reference', 'object.ref', o.ref) : ''))}`;
     if (o.definition) {
-      html += `${field('Label', 'object.label', o.label)}${fields(field('Label X offset', 'object.labelX', unit(o.labelX)) + field('Label Y offset', 'object.labelY', unit(o.labelY)) + field('Label size', 'object.labelSize', unit(o.labelSize)) + field('Face color', 'object.color', o.color, 'color'))}${field('Label layer', 'object.layer', o.layer, 'select', options(layers.map(l => [l, layerNames[l]]), o.layer))}<div class="section"><h3>Physical definition</h3><p class="help-text">${o.definition.verified ? '✓ Measured / verified by user' : o.definition.provenance?.status==='manufacturer-sourced' ? '◇ Sourced dimensions · clearance assumptions' : '△ Dimensions unverified'}<br>Rear depth ${unit(o.definition.depth)} ${app.prefs.units} · Mount ${unit(o.definition.minThickness)}–${unit(o.definition.maxThickness)} ${app.prefs.units}</p><div class="row">${btn('Edit definition', 'edit-definition', 'small')}${btn('Replace part', 'replace', 'small')}</div><div class="row" style="margin-top:8px">${btn('Save to library', 'save-library', 'small')}${btn('Check revisions', 'library-updates', 'small')}${btn('Datasheet / photo', 'part-evidence', 'small')}</div></div>`;
+      html += `${field('Label', 'object.label', o.label)}<div class="component-label-switches"><label class="checkline"><input type="checkbox" data-label-scope="component" data-label-side="front" data-id="${o.id}" ${labelSides(o).front?'checked':''}> Label on front</label><label class="checkline"><input type="checkbox" data-label-scope="component" data-label-side="rear" data-id="${o.id}" ${labelSides(o).rear?'checked':''}> Label + reference on rear</label></div><p class="help-text">The panel’s Front / Rear label switches also apply. Front labels affect fabrication artwork; rear labels appear in assembly guides.</p>${fields(field('Label X offset', 'object.labelX', unit(o.labelX)) + field('Label Y offset', 'object.labelY', unit(o.labelY)) + field('Label size', 'object.labelSize', unit(o.labelSize)) + field('Face color', 'object.color', o.color, 'color'))}${field('Label layer', 'object.layer', o.layer, 'select', options(layers.map(l => [l, layerNames[l]]), o.layer))}<div class="section"><h3>Physical definition</h3><p class="help-text">${o.definition.verified ? '✓ Measured / verified by user' : o.definition.provenance?.status==='manufacturer-sourced' ? '◇ Sourced dimensions · clearance assumptions' : '△ Dimensions unverified'}<br>Rear depth ${unit(o.definition.depth)} ${app.prefs.units} · Mount ${unit(o.definition.minThickness)}–${unit(o.definition.maxThickness)} ${app.prefs.units}</p><div class="row">${btn('Edit definition', 'edit-definition', 'small')}${btn('Replace part', 'replace', 'small')}</div><div class="row" style="margin-top:8px">${btn('Save to library', 'save-library', 'small')}${btn('Check revisions', 'library-updates', 'small')}${btn('Datasheet / photo', 'part-evidence', 'small')}</div></div>`;
       if (app.sim) {
         const k = o.definition.kind;
         html += `<div class="section"><h3>Operate ${esc(o.ref)}</h3>${['pot', 'encoder'].includes(k) ? `<label class="field">Value (0–100)<input id="simRange" type="range" min="0" max="100" value="${app.sim.values[o.id] || 0}"></label>` : k === 'button' ? `<div class="row">${btn('Press', 'sim-press')}${btn('Release', 'sim-release')}</div>` : k === 'toggle' ? btn('Toggle', 'sim-toggle', 'wide') : ''}<p class="help-text">Current: ${esc(app.sim.displays[o.id] || app.sim.values[o.id] || 0)}</p></div>`;
@@ -352,7 +356,7 @@ function renderSurface() {
     el.innerHTML = `<div class="surface-head"><h2>Connect the panel.</h2>${btn('Controller & pins', 'controller', 'small')}${btn('App handoffs','interchange','small')}<input id="wireSearch" class="search" style="width:200px;margin:0" placeholder="Search connections…" aria-label="Search wiring"></div><p class="help-text">${esc(app.p.controller.name)} · ${app.p.controller.pins.length} declared pins. Empty assignments do not block panel fabrication.</p><div class="table-wrap"><table><thead><tr><th><button data-action="sort-wires">REFERENCE ${app.wireReverse ? '↓' : '↑'}</button></th><th>TERMINAL / ROLE</th><th>PIN</th><th>SIGNAL</th><th>BUS</th><th>PULL-UP</th><th>ACTIVE LOW</th><th>DETAILS</th></tr></thead><tbody id="wireBody">${wireTable('')}</tbody></table></div>`;
   } else if (app.stage === 'fabricate') {
     const errors = app.checks.filter(f => f.severity === 'error').length;
-    el.innerHTML = `<div class="surface-head"><h2>Ready for the workbench.</h2><span class="pill">REV ${esc(app.p.revision)} · FRONT</span></div><p class="help-text">Every file in a package comes from one frozen snapshot. Canvas visibility and rear view do not change fabrication orientation.</p><div class="export-grid"><div class="export-card"><h3>Physical outputs</h3><label class="checkline"><input type="checkbox" id="out-svg" checked> Layered SVG · outlined text</label><label class="checkline"><input type="checkbox" id="out-pdf" checked> Actual-size PDF template</label><select id="pdfMode" aria-label="PDF paper format"><option value="tile">A4 tiles · 10 mm overlap</option><option value="sheet">One actual-size sheet</option></select><p class="help-text">100% scale, registration crosses and 20 mm calibration square.</p><label class="checkline"><input type="checkbox" id="out-png" checked> Transparent artwork PNG</label><label class="field">Resolution (DPI)<select id="dpi"><option>150</option><option selected>300</option><option>600</option></select></label></div><div class="export-card"><h3>Assembly & archive</h3><label class="checkline"><input type="checkbox" id="out-wiring" checked> Wiring CSV & pin-map document</label><label class="checkline"><input type="checkbox" id="out-code" checked> Arduino assignment scaffolding</label><p>Project JSON, build sheet and a file manifest are always included. Generic geometry needs physical verification.</p><div class="note">${app.p.panels.map(b => `${esc(b.name)} · ${unit(b.w)} × ${unit(b.h)} ${app.prefs.units}`).join('<br>')}</div></div></div><details class="advanced-only"><summary>Fit allowance & output inclusion</summary><p class="help-text">Fit allowance expands opening geometry per side. It is not automatic kerf compensation. Circles and rectangles only; unsupported shapes stop export.</p><label class="field">Opening allowance per side (mm)<input id="fitAllowance" type="number" step="0.01" value="0" min="-5" max="5"></label><p class="help-text">Each panel uses its export-layer checkboxes. PNG includes only selected engraving, UV, overlay and registration layers. Reference is omitted unless selected for SVG/PDF.</p></details><div class="note ${errors ? 'warning' : ''}">${errors ? `${errors} error findings need review. ` : ''}${app.checks.length} findings, including unverified dimensions. ${btn('Review checks', 'checks-tab', 'small')}</div><div class="export-actions">${btn('↓ Create fabrication ZIP', 'export-zip', 'primary')}${btn('SVG', 'export-svg')}${btn('PDF', 'export-pdf')}${btn('PNG', 'export-png')}${btn('JSON', 'backup')}${btn('App handoffs','interchange')}</div><details><summary>Export history & freshness</summary><div id="historyList">${historyHTML()}</div></details>`;
+    el.innerHTML = `<div class="surface-head"><h2>Ready for the workbench.</h2><span class="pill">REV ${esc(app.p.revision)} · FRONT</span></div><p class="help-text">Every file in a package comes from one frozen snapshot. Front fabrication files honor the front-label switches. Rear assembly guides have mirrored positions and readable labels; they are separate from cutting templates.</p><div class="export-grid"><div class="export-card"><h3>Physical outputs</h3><label class="checkline"><input type="checkbox" id="out-svg" checked> Layered SVG · outlined text</label><label class="checkline"><input type="checkbox" id="out-pdf" checked> Actual-size PDF template</label><select id="pdfMode" aria-label="PDF paper format"><option value="tile">A4 tiles · 10 mm overlap</option><option value="sheet">One actual-size sheet</option></select><p class="help-text">100% scale, registration crosses and 20 mm calibration square.</p><label class="checkline"><input type="checkbox" id="out-png" checked> Transparent artwork PNG</label><label class="field">Resolution (DPI)<select id="dpi"><option>150</option><option selected>300</option><option>600</option></select></label></div><div class="export-card"><h3>Assembly & archive</h3><label class="checkline"><input type="checkbox" id="out-rear" checked> Rear assembly guides (SVG + PDF when PDF enabled)</label><p class="help-text">Includes nominal openings, rear bodies, and enabled labels/references. Independent front artwork is omitted.</p><div class="row">${btn('Rear guide SVG','export-rear-svg','small')}${btn('Rear guide PDF','export-rear-pdf','small')}</div><label class="checkline"><input type="checkbox" id="out-wiring" checked> Wiring CSV & pin-map document</label><label class="checkline"><input type="checkbox" id="out-code" checked> Arduino assignment scaffolding</label><p>Project JSON, build sheet and a file manifest are always included. Generic geometry needs physical verification.</p><div class="note">${app.p.panels.map(b => `${esc(b.name)} · ${unit(b.w)} × ${unit(b.h)} ${app.prefs.units}`).join('<br>')}</div></div></div><details class="advanced-only"><summary>Fit allowance & output inclusion</summary><p class="help-text">Fit allowance expands opening geometry per side. It is not automatic kerf compensation. Circles and rectangles only; unsupported shapes stop export.</p><label class="field">Opening allowance per side (mm)<input id="fitAllowance" type="number" step="0.01" value="0" min="-5" max="5"></label><p class="help-text">Each panel uses its export-layer checkboxes. PNG includes only selected engraving, UV, overlay and registration layers. Reference is omitted unless selected for SVG/PDF.</p></details><div class="note ${errors ? 'warning' : ''}">${errors ? `${errors} error findings need review. ` : ''}${app.checks.length} findings, including unverified dimensions. ${btn('Review checks', 'checks-tab', 'small')}</div><div class="export-actions">${btn('↓ Create fabrication ZIP', 'export-zip', 'primary')}${btn('SVG', 'export-svg')}${btn('PDF', 'export-pdf')}${btn('PNG', 'export-png')}${btn('JSON', 'backup')}${btn('App handoffs','interchange')}</div><details><summary>Export history & freshness</summary><div id="historyList">${historyHTML()}</div></details>`;
   }
 }
 function wireTable(q) {
@@ -647,6 +651,7 @@ function exportOptions() {
     png: $('#out-png')?.checked !== false,
     wiring: $('#out-wiring')?.checked !== false,
     code: $('#out-code')?.checked !== false,
+    rearAssembly: $('#out-rear')?.checked !== false,
     dpi: Number($('#dpi')?.value || 300),
     pdfMode: $('#pdfMode')?.value || 'tile',
     fit: Number($('#fitAllowance')?.value || 0),
@@ -655,6 +660,7 @@ function exportOptions() {
 }
 async function doExport(type) {
   const opts = exportOptions();
+  if(type==='rear-svg'||type==='rear-pdf'){opts.view='rear-assembly';opts.fit=0;}
   if (!Number.isFinite(opts.fit) || Math.abs(opts.fit) > 5) throw Error('Fit allowance must be within ±5 mm per side.');
   if (opts.fit) {
     for (const b of app.p.panels) for (const c of b.components) for (const s of c.definition.openings) {
@@ -667,7 +673,7 @@ async function doExport(type) {
     stem = safeName(frozen.name) + '-rev-' + safeName(frozen.revision);
   exportAbort = new AbortController();
   opts.signal = exportAbort.signal;
-  modal('Preparing fabrication output', `<p id="exportProgress">Freezing revision ${esc(frozen.revision)}…</p><progress style="width:100%" aria-label="Export in progress"></progress><div class="actions">${btn('Cancel', 'close')}</div>`);
+  modal(opts.view==='rear-assembly'?'Preparing rear assembly guide':'Preparing fabrication output', `<p id="exportProgress">Freezing revision ${esc(frozen.revision)}…</p><progress style="width:100%" aria-label="Export in progress"></progress><div class="actions">${btn('Cancel', 'close')}</div>`);
   try {
     await new Promise(r => setTimeout(r, 50));
     if (type === 'zip') {
@@ -691,8 +697,8 @@ async function doExport(type) {
       app.history.push(record);
       if (storageOK) await store.put('history', record).catch(() => notice('Files downloaded; export history could not be saved.', true));
     }
-    if (type === 'svg') download(svgExport(frozen, b, opts), stem + '.svg', 'image/svg+xml');
-    if (type === 'pdf') download(await pdfExport(frozen, b, opts), stem + '.pdf', 'application/pdf');
+    if (type === 'svg' || type === 'rear-svg') download(svgExport(frozen, b, opts), stem + (type==='rear-svg'?'-rear-assembly':'') + '.svg', 'image/svg+xml');
+    if (type === 'pdf' || type === 'rear-pdf') download(await pdfExport(frozen, b, opts), stem + (type==='rear-pdf'?'-rear-assembly':'') + '.pdf', 'application/pdf');
     if (type === 'png') download(await pngExport(frozen, b, {
       ...opts,
       include: Object.fromEntries(['uv', 'overlay', 'engrave', 'registration'].map(l => [l, b.layers[l].export]))
@@ -700,7 +706,7 @@ async function doExport(type) {
     if (opts.signal.aborted) throw Error('Export canceled.');
     exportAbort = null;
     close();
-    notice('Fabrication output downloaded.');
+    notice(opts.view==='rear-assembly'?'Rear assembly guide downloaded.':'Fabrication output downloaded.');
     renderSurface();
   } catch (e) {
     exportAbort = null;
@@ -1349,6 +1355,8 @@ async function action(name, el) {
       return doExport('zip');
     case 'export-svg':
       return doExport('svg');
+    case 'export-rear-svg': return doExport('rear-svg');
+    case 'export-rear-pdf': return doExport('rear-pdf');
     case 'export-pdf':
       return doExport('pdf');
     case 'export-png':
@@ -1656,6 +1664,13 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => {
   try {
     const el = e.target;
+    if(el.dataset.labelSide){
+      const side=el.dataset.labelSide;if(!['front','rear'].includes(side))throw Error('Unknown label side.');
+      const o=el.dataset.labelScope==='panel'?app.panel:app.panel.components.find(c=>c.id===el.dataset.id);
+      if(!o)throw Error('Select a component first.');
+      if(o.definition&&(o.locked||app.panel.layers.cut.locked))throw Error('Unlock this component before editing.');
+      mutate(`change ${side} labels`,()=>o.labelSides={...labelSides(o),[side]:el.checked});return;
+    }
     if(el.id==='partCategory'||el.id==='partSource') {app.catalog[el.id==='partCategory'?'category':'source']=el.value;refreshCatalog(true);return;}
     if (el.dataset.opening) {
       definitionDraft.openings[Number(el.dataset.index)][el.dataset.opening]=Number(el.value);

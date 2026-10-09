@@ -108,6 +108,11 @@ export function validateDefinition(d) {
   }
   return d;
 }
+function validateLabelSides(o) {
+  const v=o.labelSides;
+  if(v===undefined)return;
+  if(!v||typeof v!=='object'||Array.isArray(v)||Object.keys(v).some(k=>!['front','rear'].includes(k)||typeof v[k]!=='boolean'))throw Error('Label sides must contain front/rear booleans.');
+}
 export function migrate(raw) {
   const p = clone(raw);
   if (p.app !== 'INTERFACEBENCH') throw Error('This is not an INTERFACEBENCH project.');
@@ -141,6 +146,7 @@ export function validateProject(raw) {
   }
   for (const b of p.panels) {
     id(b.id);
+    validateLabelSides(b);
     color(b.color);
     str(b.name, 'Panel name', 300);
     for (const k of ['w', 'h']) num(b[k], k, 5, 3000);
@@ -158,6 +164,7 @@ export function validateProject(raw) {
     }
     for (const c of b.components) {
       id(c.id);
+      validateLabelSides(c);
       color(c.color);
       str(c.ref, 'Reference', 80);
       if (refs.has(c.ref)) throw Error('Component references must be unique.');

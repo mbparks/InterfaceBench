@@ -1,6 +1,6 @@
 # Development roadmap
 
-Current deliverable: **1.4.0-rc.1 — expanded component catalog**.
+Current deliverable: **1.4.1-rc.1 — independent front/rear labels**.
 
 | Batch | Status | Scope |
 | --- | --- | --- |
@@ -8,6 +8,7 @@ Current deliverable: **1.4.0-rc.1 — expanded component catalog**.
 | v1.2 | Implemented | Sourced definitions, controller presets, library revisions and explicit updates. |
 | v1.3 | Implemented | PINNOTE/REFLEX/COPPERBENCH handoffs with conversion reviews. |
 | v1.4 | Implemented | 267 components, 14 categories, search/filter/favorites, part details and custom tags. |
+| v1.4.1 | Implemented | Saved front/rear label controls and rear assembly SVG/PDF guides. |
 | Stable v1.4 | Acceptance gate open | Real-browser desktop/mobile, keyboard/pointer, storage, offline/update and downloads. |
 | Next measured catalog batch | Planned | Replace prioritized generic templates with measured or primary-source footprints and explicit revision history. |
 

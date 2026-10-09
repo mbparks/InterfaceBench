@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.1-rc.1 — 2026-10-09
+
+- Added independent front/rear component-label switches per panel and per component; persisted in project JSON, undo/redo and artwork freshness.
+- Front fabrication SVG/PDF/PNG omit disabled front labels. Separate rear assembly SVG/PDF exports mirror geometry while keeping text readable, including component references.
+- Rear assembly guides can be bundled in fabrication ZIPs with explicit orientation metadata; independent front artwork is omitted.
+- Rear label contrast improved; schematic contact markers now fit within rear-body bounds for dense connectors.
+- Added a clean-front/labeled-rear example and seven regression tests. 64 tests pass; actual canvas SVG and assembly PDF geometry were rendered and visually reviewed. Actual browser acceptance remains open.
+
 ## 1.4.0-rc.1 — 2026-10-09
 
 - Expanded built-in library from 12 to 267 parts in 14 categories: 255 additional generic planning definitions with openings, rear/access envelopes and terminals where relevant.

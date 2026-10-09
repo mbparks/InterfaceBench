@@ -1,8 +1,9 @@
-import { VERSION, SCHEMA, clone, esc, layers, layerNames, fingerprints } from './model.js';
-import { scene, svgElement, worldCommands, pathData, mapCommands, transform, textShape, commands } from './geometry.js';
+import { VERSION, SCHEMA, clone, esc, layers, layerNames, fingerprints, labelSides } from './model.js';
+import { scene, rearAssemblyScene, svgElement, worldCommands, pathData, mapCommands, transform, textShape, commands } from './geometry.js';
 import { runChecks } from './checks.js';
 export const safeName = s => String(s).normalize('NFKD').replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-|-$/g, '').slice(0, 70) || 'panel';
 export function svgExport(project, panel, opts = {}) {
+  if(opts.view==='rear-assembly')return `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="${panel.w}mm" height="${panel.h}mm" viewBox="0 0 ${panel.w} ${panel.h}"><title>${esc(project.name)} — ${esc(panel.name)} — REAR ASSEMBLY GUIDE</title><desc>INTERFACEBENCH ${VERSION}; rear assembly reference, not a cutting template; mirrored about vertical centre; readable labels; top-left rear-view origin; nominal openings, no fit allowance. Includes rear envelopes and enabled rear component labels/references; excludes independent front artwork.</desc>${rearAssemblyScene(panel).map(i=>svgElement(i)).join('\n')}</svg>`;
   const origin = panel.origin === 'center' ? {
     x: panel.w / 2,
     y: panel.h / 2
@@ -135,7 +136,7 @@ export async function pdfExport(project, panel, opts = {}) {
     nx = tiled ? Math.max(1, Math.ceil((panel.w - overlap) / strideX)) : 1,
     ny = tiled ? Math.max(1, Math.ceil((panel.h - overlap) / strideY)) : 1;
   if (nx * ny > 400) throw Error('Template exceeds 400 pages. Use a smaller panel or actual-size sheet.');
-  const items = scene(project, panel, opts);
+  const items = opts.view==='rear-assembly'?rearAssemblyScene(panel):scene(project, panel, opts);
   let count = 0;
   for (let row = 0; row < ny; row++) for (let col = 0; col < nx; col++) {
     if (opts.signal?.aborted) throw Error('Export canceled.');
@@ -149,7 +150,7 @@ export async function pdfExport(project, panel, opts = {}) {
       color: rgb(.12, .2, .14)
     });
     label(`${project.name.slice(0, 45)} / ${panel.name.slice(0, 30)} / Rev ${project.revision}`, 10, 10, 10);
-    label(`FRONT fabrication view | tile ${col + 1},${row + 1} of ${nx}x${ny} | ${panel.w} x ${panel.h} mm`, 10, 16);
+    label(`${opts.view==='rear-assembly'?'REAR assembly guide (not cutting)':'FRONT fabrication view'} | tile ${col + 1},${row + 1} of ${nx}x${ny} | ${panel.w} x ${panel.h} mm`, 10, 16);
     label('PRINT AT 100% / ACTUAL SIZE. Disable Fit. Verify the calibration square.', 10, 21);
     page.pushOperators(pushGraphicsState(), rectangle(mm(9.8), mm(pageH - 27 - usableH - .2), mm(usableW + .4), mm(usableH + .4)), clip(), endPath());
     for (const item of items) {
@@ -198,14 +199,14 @@ export async function pdfExport(project, panel, opts = {}) {
     });
     label('20 x 20 mm', 34, pageH - 20);
     label(`Calibration | ${tiled ? '10 mm overlap' : 'single actual-size sheet'} | page ${++count}/${nx * ny}`, 34, pageH - 14);
-    label(`Cut allowance ${opts.fit || 0} mm/side. Text outlined. No printer color profile.`, 34, pageH - 8, 7);
+    label(opts.view==='rear-assembly'?'Mirrored rear reference. Readable labels. Nominal openings; no allowance.':`Cut allowance ${opts.fit || 0} mm/side. Text outlined. No printer color profile.`, 34, pageH - 8, 7);
     await new Promise(r => setTimeout(r, 0));
   }
   return await pdf.save();
 }
 export function buildSheet(p) {
   const findings = runChecks(p);
-  return `INTERFACEBENCH ${VERSION}\n${p.name} — Revision ${p.revision}\n\nFABRICATION\nFront orientation; +X right / +Y down. Every panel uses its declared origin across SVG outputs.\nCheck dimensions on actual hardware. Generic part definitions are unverified.\nPrint PDF at 100%; measure its 20 mm calibration square.\n\nPANELS\n${p.panels.map(b => `${b.name}: ${b.w} x ${b.h} x ${b.thickness} mm, ${b.material}, ${b.process}; ${b.depth} mm rear depth`).join('\n')}\n\nCOMPONENTS / QUANTITIES\n${p.panels.map(b => {
+  return `INTERFACEBENCH ${VERSION}\n${p.name} — Revision ${p.revision}\n\nFABRICATION\nFront orientation; +X right / +Y down. Every panel uses its declared origin across SVG outputs.\nCheck dimensions on actual hardware. Generic part definitions are unverified.\nPrint PDF at 100%; measure its 20 mm calibration square.\nFront label switches control fabrication text. Rear assembly files are mirrored reference guides, not cutting templates.\n\nLABEL SIDES\n${p.panels.map(b => `${b.name}: front labels ${labelSides(b).front ? "on" : "off"}, rear labels ${labelSides(b).rear ? "on" : "off"}; individual component switches also apply.`).join("\n")}\n\nPANELS\n${p.panels.map(b => `${b.name}: ${b.w} x ${b.h} x ${b.thickness} mm, ${b.material}, ${b.process}; ${b.depth} mm rear depth`).join('\n')}\n\nCOMPONENTS / QUANTITIES\n${p.panels.map(b => {
     const map = new Map();
     for (const c of b.components) {
       const k = c.definition.name;
@@ -229,6 +230,7 @@ export async function fabricationZip(project, opts = {}, progress = () => {}) {
       revision: snapshot.revision,
       created: new Date().toISOString(),
       orientation: 'front; +X right; +Y down',
+      rearAssemblyOrientation: opts.rearAssembly ? 'rear assembly guide; mirrored X about panel centre; readable labels; not cutting' : undefined,
       options: {
         ...opts,
         signal: undefined
@@ -238,6 +240,7 @@ export async function fabricationZip(project, opts = {}, progress = () => {}) {
         widthMM: b.w,
         heightMM: b.h,
         origin: b.origin,
+        labelSides: labelSides(b),
         layers: opts.include || b.layers
       })),
       files: []
@@ -263,6 +266,10 @@ export async function fabricationZip(project, opts = {}, progress = () => {}) {
       ...opts,
       include: opts.include || Object.fromEntries(['uv', 'overlay', 'engrave', 'registration'].map(l => [l, b.layers[l].export]))
     }));
+    if(opts.rearAssembly){
+      await add(`${stem}-rear-assembly.svg`,svgExport(snapshot,b,{...opts,view:'rear-assembly'}));
+      if(opts.pdf!==false)await add(`${stem}-rear-assembly.pdf`,await pdfExport(snapshot,b,{...opts,view:'rear-assembly'}));
+    }
   }
   if (opts.wiring !== false) {
     await add('wiring.csv', wiringCSV(snapshot));

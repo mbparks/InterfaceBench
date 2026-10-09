@@ -31,3 +31,14 @@ test('catalog search, filters and favorites persist through placement and undo',
  listeners.input({target:{id:'partSearch',value:'<script>',dataset:{}}});assert.match(node('#partResults').innerHTML,/No matching parts/);
  await act('catalog-reset');
 });
+test('panel and component label switches persist, undo independently and expose rear exports',async()=>{
+ await api.openProject(example());await act('stage',{stage:'arrange'});const a=api.app;
+ const change=(scope,side,checked,id)=>listeners.change({target:{dataset:{labelScope:scope,labelSide:side,id},checked}});
+ change('panel','front',false);assert.equal(a.panel.labelSides.front,false);assert.equal(a.panel.labelSides.rear,true);assert.doesNotMatch(node('#canvas').innerHTML,/data-component-label=/);
+ await act('rear');assert.match(node('#canvas').innerHTML,/data-component-label=/);assert.match(node('#canvas').innerHTML,/data-component-ref=/);
+ change('panel','rear',false);assert.doesNotMatch(node('#canvas').innerHTML,/data-component-ref=/);await act('undo');assert.equal(a.panel.labelSides.rear,true);assert.equal(a.panel.labelSides.front,false);
+ const id=a.panel.components[0].id;api.select([id]);assert.match(node('#rightContent').innerHTML,/Label on front/);change('component','rear',false,id);assert.equal(a.panel.components[0].labelSides.rear,false);await act('undo');assert.equal(a.panel.components[0].labelSides.rear,true);
+ const json=JSON.stringify(a.p);await api.openProject(JSON.parse(json));assert.equal(a.panel.labelSides.front,false);assert.equal(a.panel.labelSides.rear,true);
+ await act('stage',{stage:'fabricate'});assert.match(node('#stageSurface').innerHTML,/Rear guide SVG/);assert.match(node('#stageSurface').innerHTML,/out-rear/);
+ await act('stage',{stage:'arrange'});await act('front');
+});

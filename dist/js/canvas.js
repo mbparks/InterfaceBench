@@ -1,4 +1,4 @@
-import { esc, objects, rect, circ } from './model.js';
+import { esc, objects, rect, circ, labelVisible } from './model.js';
 import { svgElement, commands, pathData, panelShape, artShapes, objectBounds, transform, mirror } from './geometry.js';
 // Physical geometry is independent of camera and rear-view presentation.
 const primitive = (shape, fill, stroke, width = .3) => svgElement({
@@ -108,20 +108,23 @@ export function renderCanvas(app) {
       body = primitive(d.rear, '#27372bca', '#adc89b', .4);
       const w = d.rear.w || d.rear.d,
         h = d.rear.h || d.rear.d;
-      for (const [i, t] of d.terminals.entries()) body += primitive(rect(2.3, 4, (i - (d.terminals.length - 1) / 2) * 3.5, h / 2 + 1), '#b1b8a1', '#46583c', .2);
+      // Schematic contacts stay inside the declared rear envelope, including dense connectors.
+      const cols=Math.min(d.terminals.length,Math.max(1,Math.floor(w/3.5))),rows=Math.ceil(d.terminals.length/(cols||1)),dx=w/(cols+1),dy=h/(rows+1);
+      for(let i=0;i<d.terminals.length;i++)body+=primitive(rect(Math.min(2.3,dx*.55),Math.min(4,dy*.55),-w/2+(i%cols+1)*dx,-h/2+(Math.floor(i/cols)+1)*dy),'#b1b8a1','#46583c',.2);
     } else body = frontBody(c, selected.has(c.id), sim?.values[c.id] ?? c.value, sim?.displays[c.id] || c.display);
     items.push(`<g data-object="${c.id}" transform="translate(${c.x} ${c.y}) rotate(${c.rotation})" opacity="${sim?.enabled[c.id] === false ? .3 : 1}">${body}${prefs.envelopes ? `<g stroke-dasharray="1 1">${primitive(d.access, 'none', rear ? '#bbdc90' : '#3f583e', .3)}</g>` : ''}</g>`);
   }
   items.push('</g>');
   for (const c of b.components) {
-    if (c.label && b.layers[c.layer].visible) {
+    if(!labelVisible(b,c,rear?'rear':'front'))continue;
+    if (c.label && (rear || b.layers[c.layer].visible)) {
       const pos = transform(c.labelX, c.labelY, c),
         pt = rear ? mirror(pos, b.w) : pos;
-      items.push(`<text x="${pt.x}" y="${pt.y}" transform="rotate(${rear ? -c.rotation : c.rotation} ${pt.x} ${pt.y})" text-anchor="middle" font-size="${c.labelSize}" fill="#253d2c" pointer-events="none">${esc(c.label)}</text>`);
+      items.push(`<text data-component-label="${c.id}" x="${pt.x}" y="${pt.y}" transform="rotate(${rear ? -c.rotation : c.rotation} ${pt.x} ${pt.y})" text-anchor="middle" font-size="${c.labelSize}" fill="${rear?'#edffd9':'#253d2c'}" ${rear?'stroke="#14241d" stroke-width=".7" paint-order="stroke"':''} pointer-events="none">${esc(c.label)}</text>`);
     }
     if (rear) {
       const pt = mirror(c, b.w);
-      items.push(`<text x="${pt.x}" y="${pt.y + 1}" text-anchor="middle" font-size="3" fill="#d7e6bc" pointer-events="none">${esc(c.ref)}</text>`);
+      items.push(`<text data-component-ref="${c.id}" x="${pt.x}" y="${pt.y + 1}" text-anchor="middle" font-size="3" fill="#d7e6bc" stroke="#14241d" stroke-width=".7" paint-order="stroke" pointer-events="none">${esc(c.ref)}</text>`);
     }
   }
   for (const o of objects(b)) {

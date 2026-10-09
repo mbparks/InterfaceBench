@@ -1,4 +1,4 @@
-import { esc, circ, rect, layers } from './model.js';
+import { esc, circ, rect, layers, labelVisible } from './model.js';
 export const rad = d => d * Math.PI / 180;
 export const transform = (x, y, o = {}) => {
   const a = rad(o.rotation || 0);
@@ -333,6 +333,24 @@ export function artShapes(a, project) {
   }
   return shapes;
 }
+// A separately named rear assembly output; fabrication scene remains front-referenced.
+export function rearAssemblyScene(panel) {
+  const out=[];
+  const flipped=(shape,o,layer,style,owner)=>out.push({shape:{type:'path',commands:mapCommands(worldCommands(shape,o),(x,y)=>({x:panel.w-x,y}))},transform:{},layer,...style,owner});
+  flipped(panelShape(panel),{},'outline',{stroke:'#233b2b',width:.3});
+  for(const c of panel.components){
+    flipped(c.definition.rear,c,'reference',{stroke:'#65836a',fill:'#e7eee3',width:.25},c.id);
+    for(const s of c.definition.openings)flipped(s,c,'cut',{stroke:'#233b2b',width:.2},c.id);
+  }
+  // Labels are constructed after reflection so the glyphs remain readable.
+  for(const c of panel.components){
+    if(!labelVisible(panel,c,'rear'))continue;
+    const pt=mirror(transform(c.labelX,c.labelY,c),panel.w),ref=mirror(c,panel.w);
+    if(c.label)out.push({shape:textShape(c.label,0,0,c.labelSize,'center'),transform:{x:pt.x,y:pt.y,rotation:-c.rotation},layer:'engrave',fill:'#172c21',owner:c.id,annotation:'label'});
+    out.push({shape:textShape(c.ref,0,1,3,'center'),transform:{x:ref.x,y:ref.y},layer:'engrave',fill:'#172c21',owner:c.id,annotation:'reference'});
+  }
+  return out;
+}
 export function scene(project, panel, {
   include,
   fit = 0
@@ -357,7 +375,7 @@ export function scene(project, panel, {
       stroke: '#000000',
       width: .15
     }, c.id);
-    if (c.label) push(textShape(c.label, c.labelX, c.labelY, c.labelSize, 'center'), c, c.layer, {
+    if (c.label && labelVisible(panel,c,'front')) push(textShape(c.label, c.labelX, c.labelY, c.labelSize, 'center'), c, c.layer, {
       fill: '#172c21'
     }, c.id);
   }

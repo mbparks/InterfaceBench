@@ -1,25 +1,21 @@
-# Release report — INTERFACEBENCH 1.4.0-rc.1
+# Release report — INTERFACEBENCH 1.4.1-rc.1
 
-2026-10-09 · GPL-3.0-only · Project schema 3 (imports 1–3) · Library version 2 (imports 1–2).
+2026-10-09 · GPL-3.0-only · Static drop-in release · Project schema 3.
 
-## Component expansion
+## Clean front, labeled rear
 
-**267 built-in parts in 14 categories, up from 12.** The 255 additions cover controls, indicators, readouts, audio/data connectors, power/protection, sensing apertures, cable management, fasteners, fans/vents and module carriers. All additions are explicitly generic planning templates. The catalog has 265 generic entries and the original 2 manufacturer-sourced E-Switch entries.
+Panel-wide Front/Rear label switches live beside the view controls. Individual component switches live in the inspector. Both are saved with the design, undoable and included in artwork freshness and baseline comparisons. Existing projects default to both sides on.
 
-Browse by category, source or favorites; search names, tags and sizes; load matches 24 at a time; inspect all dimensions and opening offsets before placement. Search survives placement. Favorites persist in workspace preferences. Custom definitions have editable category/tags. Existing embedded project dimensions remain intact.
+Front fabrication SVG/PDF/PNG honor front labels. Rear assembly SVG/PDF outputs reflect geometry while keeping labels and references readable. Guides are available directly in Fabricate and as optional companions in the fabrication ZIP. They use nominal openings and rear-body envelopes, exclude independent front artwork and are clearly labeled as assembly references, not cutting templates. Front fabrication origin behavior remains unchanged.
 
-The static catalog in `CATALOG.html` and complete `docs/COMPONENT-CATALOG.md` inventory are generated from the shipped definitions. No network or new runtime dependency was added.
+The 267-part library remains included. Rear label contrast is improved and schematic contact markers for dense connectors remain within rear-body bounds.
 
-## Verification and limits
+## Verification
 
-**57 automated tests pass.** All definitions validate, place, round-trip and export their cutouts. New generic patterns are checked for internal overlap and containment; complex patterns also pass PDF and ZIP generation. UI contracts cover filtering, favorites, details, placement, undo and pagination. See `docs/QA.md` and `qa/v14-test-results.txt`.
+64 tests pass. All front/rear combinations, saved/imported settings, undo, per-component visibility, canonical cut geometry, mirrored geometry, readable glyphs, PDF and frozen ZIP output are covered. Actual canvas geometry and the rear PDF were rendered and visually reviewed. Browser acceptance is still pending: the Sites skill prohibits using a substitute browser when the supported browser-control skill is unavailable. No actual browser or hardware validation is claimed.
 
-This is still a release candidate. The Sites skill requires skipping browser QA when supported browser control is unavailable and disallows a substitute browser path. Real-browser UI, storage and offline/update acceptance remain unverified. No host deployment, physical measurement or hardware validation is claimed.
+## Use
 
-Connector-family names identify intended planning use, not certified mounting/mating geometry. P-number terminals are placeholders and passive 0 V means unspecified. Generic carriers do not claim compatibility with named boards. Complex sensors/modules do not gain circuit simulation or drivers. Verify purchased hardware and replace approximated dimensions/cutouts before fabrication.
+In Arrange, uncheck **Labels → Front** and keep **Rear** checked. Switch to Rear to see readable component references and labels. For one component, use its inspector switches. In Fabricate, download **Rear guide SVG / PDF**, or leave rear guides enabled in the ZIP options.
 
-Earlier v1.1–v1.3 authoring, reusable revisions and companion handoffs remain included. Historical evidence is in `RELEASE-v1.3-history.md`.
-
-## Install
-
-Extract the complete server ZIP into the existing `/interfacebench/` route with `index.html` at its root. Upload every file and directory together. Make a project JSON backup before updating; use Save & reload when the app offers the new cache. The repository ZIP contains the identical distribution, source, tests and documentation.
+Upload all files from the server ZIP to the existing `/interfacebench/` folder, keeping index.html at the root. Back up project JSON before updating and use Save & reload when offered. Source/tests/docs and the identical distribution are in the repository ZIP. Use v1.4.1+ to honor saved side settings.

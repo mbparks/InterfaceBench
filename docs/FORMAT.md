@@ -49,3 +49,9 @@ Version2 library definitions may include `photoAsset` (embedded PNG/JPEG). Place
 ## Optional v1.4 definition metadata (schema remains 3)
 
 `category` is a string up to 100 characters; known built-in categories drive browsing, and older/unknown categories fall back by behavior kind. `tags` is an array of up to 40 strings, each up to 100 characters. `visual` is `standard` or `outline`, used only for presentation. Existing behavior kinds are unchanged. These fields travel in embedded project definitions and reusable library revisions. Missing metadata remains valid. `favoriteParts` is a list of catalog IDs in workspace preferences, not part of project design or wiring fingerprints.
+
+## Optional v1.4.1 label-side settings
+
+Panels and component instances may contain `labelSides: {front: boolean, rear: boolean}`. Missing flags default to true without rewriting imported legacy files. An effective side is enabled only when both panel and component flags permit it. Panel flags are master controls. Settings participate in artwork fingerprints and baseline comparisons, not cut-geometry or wiring fingerprints. They are preserved by duplicate, undo, JSON and frozen ZIP operations. Schema remains 3; use v1.4.1+ to interpret the new visibility semantics.
+
+Front fabrication exports remain in their existing origin/orientation and honor the front flags plus export-layer inclusion. Rear assembly outputs explicitly use rear-view top-left coordinates with reflected X positions and readable text. Rear label/reference inclusion uses rear flags independently of front artwork layers. The assembly output includes nominal openings and rear envelopes, omits independent front artwork, and ignores fabrication fit allowance. It is a reference guide, not a machining template. Optional `rearAssemblyOrientation` and each panel's `labelSides` are recorded in fabrication manifests when applicable.

@@ -1,3 +1,13 @@
+# Verification record — 1.4.1-rc.1
+
+2026-10-09. **64 automated tests pass** (`qa/v141-test-results.txt`). Seven new checks cover all four front/rear combinations, per-component gating, legacy defaults, malformed data rejection, JSON persistence, cut/artwork separation, mirrored asymmetric geometry, readable rotated glyphs, baseline/fingerprint changes, rear PDF/ZIP export and UI controls/undo.
+
+Actual canvas geometry was serialized through `renderCanvas`, rasterized and visually reviewed in `qa/labels-front-canvas.png` and `qa/labels-rear-canvas.png`. The rear PDF was rendered with Poppler and reviewed in `qa/labels-rear-assembly.png`: references and text read normally, with physically mirrored placement and a calibration square. These are static renderer/export checks, not browser UI screenshots. The example is `examples/clean-front-labeled-rear.json` and its generator is `scripts/label-fixture.mjs`.
+
+Real-browser acceptance remains unverified under the Sites skill restriction documented below. The prepared browser journey now checks toolbar switches, rear labels/references, undo, reload persistence and rear PDF download. Also verify individual component flags, keyboard operation, narrow-screen toolbar wrapping and label changes while viewing multiple panels. Rehearsal disables design-setting changes.
+
+## Prior verification records
+
 # Verification record — 1.4.0-rc.1
 
 Date: 2026-10-09. Tests use the copied server distribution. **57 automated tests pass** (`qa/v14-test-results.txt`): the prior 50 plus six catalog checks and one additional UI flow contract.

@@ -1,7 +1,10 @@
 /* INTERFACEBENCH • GPL-3.0-only. Canonical dimensions are millimetres. */
-export const VERSION = '1.4.0-rc.1';
+export const VERSION = '1.4.1-rc.1';
 export const SCHEMA = 3;
 export const clone = v => structuredClone(v);
+// Absent settings retain the behavior of schema 1–3 projects.
+export const labelSides = o => ({front:o.labelSides?.front!==false,rear:o.labelSides?.rear!==false});
+export const labelVisible = (panel,component,side='front') => labelSides(panel)[side] && labelSides(component)[side];
 export const uid = () => globalThis.crypto?.randomUUID?.() || `id_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
   '&': '&amp;',
@@ -120,6 +123,7 @@ export function newPanel(name = 'Main panel') {
     color: '#b49365',
     outline: [],
     components: [],
+    labelSides: {front:true,rear:true},
     artwork: [],
     layers: Object.fromEntries(layers.map(l => [l, {
       visible: true,
@@ -165,6 +169,7 @@ export function addComponent(project, panel, definition, x = 40, y = 40) {
     id: uid(),
     ref,
     label: definition.name,
+    labelSides: {front:true,rear:true},
     definition: clone(definition),
     x,
     y,
@@ -394,12 +399,14 @@ export function fingerprints(p) {
   }));
   const art = p.panels.map(b => ({
     id: b.id,
+    labelSides: labelSides(b),
     components: b.components.map(c => ({
       id: c.id,
       x: c.x,
       y: c.y,
       rotation: c.rotation,
       label: c.label,
+      labelSides: labelSides(c),
       labelX: c.labelX,
       labelY: c.labelY,
       labelSize: c.labelSize,
@@ -441,7 +448,7 @@ export function baselineDiff(p, base) {
       changes.push(`Panel added: ${b.name}`);
       continue;
     }
-    for (const k of ['w', 'h', 'shape', 'radius', 'thickness', 'material', 'depth', 'outline', 'layers']) if (stable(b[k]) !== stable(old[k])) changes.push(`${b.name}: ${k} changed`);
+    for (const k of ['w', 'h', 'shape', 'radius', 'thickness', 'material', 'depth', 'outline', 'layers', 'labelSides']) if (stable(b[k]) !== stable(old[k])) changes.push(`${b.name}: ${k} changed`);
     const prev = new Map(objects(old).map(o => [o.id, o]));
     for (const o of objects(b)) {
       if (!prev.has(o.id)) changes.push(`Added ${o.ref || o.text || o.type}`);else if (stable(o) !== stable(prev.get(o.id))) changes.push(`Changed ${o.ref || o.text || o.type}`);

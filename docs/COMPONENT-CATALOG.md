@@ -1,6 +1,6 @@
 # Component catalog
 
-INTERFACEBENCH 1.4.0-rc.1: **267 components in 14 categories**. Expanded from 12 to 267: 255 additional generic definitions.
+INTERFACEBENCH 1.4.1-rc.1: **267 components in 14 categories**. Expanded from 12 to 267: 255 additional generic definitions.
 
 265 generic planning templates and 2 manufacturer-sourced E-Switch definitions. Generic dimensions, terminal topology and panel limits are illustrative. They are not measured footprints or manufacturer ratings. Even sourced parts retain explicit clearance assumptions. Measure your selected hardware before fabrication.
 
