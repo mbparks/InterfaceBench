@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
-"""Add the reviewed label-side example to the generated release/catalog report."""
+"""Publish the matching front/rear label appearance correction."""
 from pathlib import Path
-import base64,json
-root=Path(__file__).resolve().parents[1]
-version=json.loads((root/'package.json').read_text())['version']
-report=root.parent/'output'/f'INTERFACEBENCH-v{version}-release-report.html'
-html=report.read_text().replace('A much bigger parts bench.','Clean front. Useful rear.')
-cards=[]
-for side,title in [('front','Front labels off'),('rear','Rear labels and references on')]:
-    data=base64.b64encode((root/'qa'/f'labels-{side}-canvas.png').read_bytes()).decode()
-    cards.append(f'<figure style="margin:0"><img style="width:100%;height:auto;border-radius:8px" alt="{title}: rendered component geometry" src="data:image/png;base64,{data}"><figcaption>{title}</figcaption></figure>')
-section='''<section><h2>New in 1.4.1: independent label sides</h2>
-<p>In Arrange, use <strong>Labels → Front / Rear</strong> beside the view controls. Turn Front off and leave Rear on for a clean front with useful assembly labels. The panel switches are master controls; each component also has its own front/rear switches in the inspector. Changes save with the project and support undo.</p>
-<p>Front SVG/PDF/PNG respects the front flags. Fabricate offers <strong>Rear guide SVG / PDF</strong> with mirrored positions and readable labels/references; these can also accompany the fabrication ZIP. Rear guides are assembly references, not cutting templates. Independent front artwork keeps its existing layer controls.</p>
-<p><strong>64 tests pass.</strong> The images below are static renders from the actual canvas geometry, not browser screenshots. The rear assembly PDF was also rendered and visually reviewed. Real-browser acceptance remains pending under the Sites workflow restriction.</p>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">'''+''.join(cards)+'''</div></section>'''
-html=html.replace('<main>','<main>'+section,1)
+import base64, json
+root = Path(__file__).resolve().parents[1]
+version = json.loads((root / 'package.json').read_text())['version']
+report = root.parent / 'output' / f'INTERFACEBENCH-v{version}-release-report.html'
+def image(name, alt):
+    data = base64.b64encode((root / 'qa' / name).read_bytes()).decode()
+    return f'<img alt="{alt}" src="data:image/png;base64,{data}">'
+html = f'''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>INTERFACEBENCH {version} — Matching label appearance</title><style>body{{max-width:1000px;margin:40px auto;padding:0 24px;font:16px/1.6 system-ui;color:#233a2c;background:#f5f6ef}}h1{{font-size:36px;line-height:1.15}}h2{{margin-top:32px}}img{{display:block;width:100%;height:auto;border:1px solid #c3cfba;border-radius:7px}}.note{{padding:18px;background:#e4eadb}}small,figcaption{{color:#586d59}}figure{{margin:24px 0}}figcaption{{font-size:13px}}</style><h1>Matching labels on both faces.</h1><p>INTERFACEBENCH <strong>{version}</strong> · 2026-10-09</p><p>Rear labels previously received a pale fill and dark outline. That rear-only styling has been removed: both faces now use the same plain dark text, font size and alignment.</p><p>The two component checkboxes remain <strong>Label on Front</strong> and <strong>Label on Rear</strong>. Either, both or neither can be selected. Fabrication output and physical rear placement are unchanged.</p><h2>Reviewed appearance</h2><figure>{image('v143-front-labels.png', 'Front canvas labels rendered as plain dark text')}<figcaption>Front face: actual canvas geometry rendered to PNG.</figcaption></figure><figure>{image('v143-rear-labels.png', 'Rear canvas labels with the identical plain dark text styling')}<figcaption>Rear face: matching text appearance with reflected physical positions. These are static renderer outputs, not browser UI screenshots.</figcaption></figure><h2>Verification</h2><p><strong>64 existing automated tests pass.</strong> A separate comparison confirms identical front/rear label attributes after excluding position and rotation: dark #253d2c fill, no outline, matching size and alignment. Both rendered images were visually reviewed.</p><p class="note">Real-browser QA remains pending under the existing Sites workflow restriction. The release remains a candidate.</p><p>Upload the full server ZIP to the existing <code>/interfacebench/</code> folder. Back up project JSON before updating; use Save &amp; reload when offered. The repository ZIP includes the same deployment files, source, tests and documentation.</p><small>GPL-3.0-only · 267 components · local-first · no telemetry</small></html>'''
 report.write_text(html)
 print(report)

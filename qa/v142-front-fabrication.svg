@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="180mm" height="100mm" viewBox="0 0 180 100">
+<title>Clean front · labeled rear — Main panel — Rev A — FRONT</title>
+<desc>INTERFACEBENCH 1.4.2-rc.1; front fabrication view; +X right, +Y down; top-left origin; fit allowance per side 0 mm; text outlined in DejaVu Sans. Nominal geometry unless explicit allowance shown.</desc>
+<g transform="translate(0 0)"><g id="outline" data-process="Panel outline"><rect x="0" y="0" width="180" height="100" rx="5" transform="translate(0 0) rotate(0)" fill="none" stroke="#000000" stroke-width="0.15"/></g>
+<g id="cut" data-process="Cutouts &amp; drilling"><circle cx="0" cy="0" r="6" transform="translate(40 45) rotate(0)" fill="none" stroke="#000000" stroke-width="0.15"/>
+<circle cx="0" cy="0" r="3.5" transform="translate(90 45) rotate(0)" fill="none" stroke="#000000" stroke-width="0.15"/>
+<rect x="-5" y="-2.5" width="10" height="5" rx="1" transform="translate(140 45) rotate(0)" fill="none" stroke="#000000" stroke-width="0.15"/>
+<circle cx="-11.5" cy="0" r="1.6" transform="translate(140 45) rotate(0)" fill="none" stroke="#000000" stroke-width="0.15"/>
+<circle cx="11.5" cy="0" r="1.6" transform="translate(140 45) rotate(0)" fill="none" stroke="#000000" stroke-width="0.15"/></g>
+<g id="engrave" data-process="Engraving"></g>
+<g id="uv" data-process="UV-print artwork"></g>
+<g id="overlay" data-process="Adhesive overlay"></g>
+<g id="registration" data-process="Registration"></g>
+<g id="reference" data-process="Reference geometry"></g></g>
+</svg>

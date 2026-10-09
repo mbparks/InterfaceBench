@@ -127,6 +127,15 @@ export function migrate(raw) {
   }
   if (p.schema === 2) p.schema = 3;
   if (p.schema !== SCHEMA) throw Error(`Unsupported project schema ${p.schema}; this release reads schemas 1, 2 and 3.`);
+  // Fold the short-lived v1.4.1 panel masters into the two component flags once.
+  for(const b of p.panels||[])if(b.labelSides!==undefined){
+    validateLabelSides(b);
+    for(const c of b.components||[]){
+      validateLabelSides(c);
+      c.labelSides={front:b.labelSides.front!==false&&c.labelSides?.front!==false,rear:b.labelSides.rear!==false&&c.labelSides?.rear!==false};
+    }
+    delete b.labelSides;
+  }
   return p;
 }
 export function validateProject(raw) {

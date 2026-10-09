@@ -117,14 +117,10 @@ export function renderCanvas(app) {
   items.push('</g>');
   for (const c of b.components) {
     if(!labelVisible(b,c,rear?'rear':'front'))continue;
-    if (c.label && (rear || b.layers[c.layer].visible)) {
+    if (c.label && b.layers[c.layer].visible) {
       const pos = transform(c.labelX, c.labelY, c),
         pt = rear ? mirror(pos, b.w) : pos;
-      items.push(`<text data-component-label="${c.id}" x="${pt.x}" y="${pt.y}" transform="rotate(${rear ? -c.rotation : c.rotation} ${pt.x} ${pt.y})" text-anchor="middle" font-size="${c.labelSize}" fill="${rear?'#edffd9':'#253d2c'}" ${rear?'stroke="#14241d" stroke-width=".7" paint-order="stroke"':''} pointer-events="none">${esc(c.label)}</text>`);
-    }
-    if (rear) {
-      const pt = mirror(c, b.w);
-      items.push(`<text data-component-ref="${c.id}" x="${pt.x}" y="${pt.y + 1}" text-anchor="middle" font-size="3" fill="#d7e6bc" stroke="#14241d" stroke-width=".7" paint-order="stroke" pointer-events="none">${esc(c.ref)}</text>`);
+      items.push(`<text data-component-label="${c.id}" x="${pt.x}" y="${pt.y}" transform="rotate(${rear ? -c.rotation : c.rotation} ${pt.x} ${pt.y})" text-anchor="middle" font-size="${c.labelSize}" fill="#253d2c" pointer-events="none">${esc(c.label)}</text>`);
     }
   }
   for (const o of objects(b)) {

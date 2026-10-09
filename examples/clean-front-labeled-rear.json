@@ -1,12 +1,12 @@
 {
   "app": "INTERFACEBENCH",
   "schema": 3,
-  "id": "a149fd18-5796-44a1-a567-9bf96d19c9da",
+  "id": "3629e6fd-15e8-4263-b775-ceb35f4ac12a",
   "name": "Clean front · labeled rear",
   "revision": "A",
   "panels": [
     {
-      "id": "46a12361-82d3-47c4-a80e-d1f70126cb55",
+      "id": "5ca0cce3-8c18-4fbb-a787-5d6bf2ccf774",
       "name": "Main panel",
       "w": 180,
       "h": 100,
@@ -22,11 +22,11 @@
       "outline": [],
       "components": [
         {
-          "id": "3ea28c2d-830e-460e-ba94-551df6e96c24",
+          "id": "ba8102b8-3c8b-429a-8dc9-c95d517aaa23",
           "ref": "SW1",
           "label": "RESET",
           "labelSides": {
-            "front": true,
+            "front": false,
             "rear": true
           },
           "definition": {
@@ -106,11 +106,11 @@
           "notes": ""
         },
         {
-          "id": "a4f53bfa-8349-4225-94c2-9e2b6a76c047",
+          "id": "565582a4-fef6-4818-9550-94e605a3d39e",
           "ref": "RV1",
           "label": "GAIN",
           "labelSides": {
-            "front": true,
+            "front": false,
             "rear": true
           },
           "definition": {
@@ -197,11 +197,11 @@
           "notes": ""
         },
         {
-          "id": "a9a2cee6-9261-4607-8c55-a7069d78e12f",
+          "id": "3038fd86-169e-4d43-97ba-d5c825dd8b65",
           "ref": "J1",
           "label": "USB",
           "labelSides": {
-            "front": true,
+            "front": false,
             "rear": true
           },
           "definition": {
@@ -468,10 +468,6 @@
           "notes": ""
         }
       ],
-      "labelSides": {
-        "front": false,
-        "rear": true
-      },
       "artwork": [],
       "layers": {
         "outline": {
@@ -754,5 +750,5 @@
   "baselines": [],
   "acknowledgments": {},
   "assets": {},
-  "modified": "2026-10-09T15:55:26.591Z"
+  "modified": "2026-10-09T16:09:27.053Z"
 }

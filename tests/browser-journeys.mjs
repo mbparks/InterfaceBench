@@ -18,13 +18,12 @@ let browser;try{browser=await chromium.launch();const ctx=await browser.newConte
  await page.evaluate(()=>INTERFACEBENCH.action('controller'));await page.locator('#m-profile').selectOption('nano-every');await page.getByRole('button',{name:'Load preset',exact:true}).click();assert.equal(await page.locator('#m-name').inputValue(),'Arduino Nano Every');await page.evaluate(()=>INTERFACEBENCH.action('close'));
  await page.evaluate(()=>INTERFACEBENCH.action('interchange'));await page.getByRole('button',{name:'Review PINNOTE export',exact:true}).click();const handoffEvent=page.waitForEvent('download');await page.getByRole('button',{name:'Download handoff ZIP',exact:true}).click();await (await handoffEvent).saveAs(path.join(out,'pinnote-handoff.zip'));
  await page.locator('[data-action="stage"][data-stage="fabricate"]').click();const zipEvent=page.waitForEvent('download');await page.locator('[data-action="export-zip"]').click();await (await zipEvent).saveAs(path.join(out,'fabrication.zip'));await page.locator('[data-action="stage"][data-stage="arrange"]').click();
- // v1.4.1 label sides: execute in a supported browser environment.
- await page.locator('#labels-front').uncheck();assert.equal(await page.locator('#canvas [data-component-label]').count(),0);
- await page.locator('#rear').click();assert.ok(await page.locator('#canvas [data-component-label]').count()>0);
- await page.locator('#labels-rear').uncheck();assert.equal(await page.locator('#canvas [data-component-ref]').count(),0);
- await page.locator('#undo').click();assert.equal(await page.locator('#labels-rear').isChecked(),true);assert.equal(await page.locator('#labels-front').isChecked(),false);
- await page.evaluate(()=>INTERFACEBENCH.save());await page.reload();await page.waitForSelector('#labels-front');assert.equal(await page.locator('#labels-front').isChecked(),false);assert.equal(await page.locator('#labels-rear').isChecked(),true);
- await page.locator('[data-action="stage"][data-stage="fabricate"]').click();const rearPdfEvent=page.waitForEvent('download');await page.getByRole('button',{name:'Rear guide PDF',exact:true}).click();await (await rearPdfEvent).saveAs(path.join(out,'rear-assembly.pdf'));await page.locator('[data-action="stage"][data-stage="arrange"]').click();
+ // v1.4.2: two component checkboxes control the manufacturing face.
+ const selectedId=await page.evaluate(()=>INTERFACEBENCH.app.panel.components[0].id);await page.evaluate(id=>INTERFACEBENCH.select([id]),selectedId);
+ await page.getByLabel('Label on Front',{exact:true}).uncheck();await page.getByLabel('Label on Rear',{exact:true}).check();
+ assert.equal(await page.locator(`#canvas [data-component-label="${selectedId}"]`).count(),0);await page.locator('#rear').click();assert.equal(await page.locator(`#canvas [data-component-label="${selectedId}"]`).count(),1);
+ await page.evaluate(()=>INTERFACEBENCH.save());await page.reload();await page.waitForSelector('#canvas');assert.deepEqual(await page.evaluate(()=>INTERFACEBENCH.app.panel.components[0].labelSides),{front:false,rear:true});
+ await page.locator('[data-action="stage"][data-stage="fabricate"]').click();await page.locator('#rear').click();const rearEvent=page.waitForEvent('download');await page.getByRole('button',{name:'SVG',exact:true}).click();const rearFile=await rearEvent;assert.match(rearFile.suggestedFilename(),/-rear-labels.svg$/);await rearFile.saveAs(path.join(out,'rear-labels.svg'));await page.locator('[data-action="stage"][data-stage="arrange"]').click();await page.locator('#front').click();
  // v1.4 catalog acceptance: prepared here; not executed in the managed environment.
  await page.locator('#partCategory').selectOption('data');await page.locator('#partSearch').fill('USB type C');
  assert.equal(await page.locator('#partGrid .part-card').count(),1);

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.4.3-rc.1 — 2026-10-09
+
+- Rear component labels now use the same plain text color, size and styling as front labels. Removed the rear-only light fill and dark outline.
+- The two fabrication checkboxes, physical rear positioning and per-face output behavior are unchanged.
+
+## 1.4.2-rc.1 — 2026-10-09
+
+- Corrected label scope: exactly two per-component checkboxes, Label on Front and Label on Rear, control manufacturing on either or both faces.
+- Removed panel master switches and the rear assembly-guide mode. Previous masters migrate into the component flags once; no hidden veto remains.
+- Rear fabrication emits only selected outlined label paths at reflected physical positions with readable glyphs. No rear bodies, cutouts or automatic reference numbers are added.
+- ZIPs automatically contain distinct front/rear fabrication files for the selected formats. Individual SVG/PDF/PNG uses the Front/Rear face selected above the canvas.
+- New parts default to front labels only. All 64 regression tests pass; rear SVG/PDF output was rendered and reviewed. Browser QA remains pending.
+
 ## 1.4.1-rc.1 — 2026-10-09
 
 - Added independent front/rear component-label switches per panel and per component; persisted in project JSON, undo/redo and artwork freshness.

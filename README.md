@@ -2,13 +2,13 @@
 
 **Give your contraption a face.** A self-hosted, local-first Field Instrument for physical interface design.
 
-Version **1.4.1-rc.1** · Project schema **3** · GNU GPL v3 only.
+Version **1.4.3-rc.1** · Project schema **3** · GNU GPL v3 only.
 
 This is a functional release candidate, not the final verified v1.4. The model, interface logic and export pipeline pass 64 automated checks. The original browser preview was blocked; this environment currently has no supported browser-control workflow. Real browser interaction, responsive screenshots, IndexedDB persistence and offline reload remain release gates. See `docs/QA.md` for precisely what was and was not tested.
 
 ## Launch on your server
 
-1. Extract **INTERFACEBENCH-v1.4.1-rc.1-server.zip**.
+1. Extract **INTERFACEBENCH-v1.4.3-rc.1-server.zip**.
 2. Copy **all extracted files and folders** to the server directory for `https://mbparks.com/interfacebench/`.
 3. Open that URL with the trailing slash. Choose **New panel**, **Explore an example**, or **Open project**.
 
@@ -41,13 +41,17 @@ On Windows, `py -m http.server 8000` may be the available command. Open `http://
 
 The panel design and fabrication workflow does not depend on completing electronics or rehearsal.
 
-## Front and rear labels
+Front and rear labels use the same plain text appearance.
 
-In the canvas toolbar, **Labels → Front / Rear** independently enables component labels for the current panel. Turn Front off and leave Rear on for a clean face and a labeled assembly view. These are saved project settings and support undo. Select a component to control its individual **Label on front** and **Label + reference on rear** switches. The panel switches act as master controls. Existing projects keep both sides enabled.
+## Fabricate labels on either side
 
-Front SVG/PDF/PNG exports honor front label settings. **Fabricate → Rear guide SVG / Rear guide PDF** exports the current panel with mirrored positions and readable labels/references. The fabrication ZIP includes rear SVG guides when enabled, plus rear PDFs when PDF output is enabled. Rear guides include nominal openings and rear body envelopes; they are assembly references, not cutting templates. They omit independent front artwork and use rear-view top-left coordinates. Existing front fabrication origins are unchanged.
+Select a component. Under its Label field, use exactly two checkboxes: **Label on Front** and **Label on Rear**. Choose front, rear, both, or neither. The choices save with the project and support undo. New components default to front only.
 
-Standalone artwork is controlled through its existing artwork and layer tools. Use v1.4.1 or later to honor saved label-side settings. Open `examples/clean-front-labeled-rear.json` to try the new controls.
+These control actual fabrication artwork. The fabrication ZIP automatically includes front files plus `-rear-labels.svg`, `-rear-labels.pdf` and `-rear-labels.png` for enabled formats when there are rear labels to produce. Rear SVG/PNG artwork contains the selected label paths only. Rear positions are reflected for working with the rear face up; glyphs remain readable. Turn the panel left-to-right about its vertical centreline. PDF adds its normal print header/calibration outside the panel area, with no internal crosshairs on rear output.
+
+For an individual SVG/PDF/PNG, choose Front or Rear above the canvas in Fabricate, then export. The ZIP always evaluates both faces. Independent artwork remains front artwork; the existing layer export controls still apply. Panel master switches and assembly-guide modes have been removed. Files from v1.4.1 have their effective master settings folded into the component checkboxes on import. Older files without label-side choices keep front fabrication labels and do not gain rear markings automatically.
+
+Open `examples/clean-front-labeled-rear.json` to try rear-only label fabrication.
 
 ## Components
 

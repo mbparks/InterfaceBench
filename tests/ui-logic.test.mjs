@@ -31,14 +31,14 @@ test('catalog search, filters and favorites persist through placement and undo',
  listeners.input({target:{id:'partSearch',value:'<script>',dataset:{}}});assert.match(node('#partResults').innerHTML,/No matching parts/);
  await act('catalog-reset');
 });
-test('panel and component label switches persist, undo independently and expose rear exports',async()=>{
- await api.openProject(example());await act('stage',{stage:'arrange'});const a=api.app;
- const change=(scope,side,checked,id)=>listeners.change({target:{dataset:{labelScope:scope,labelSide:side,id},checked}});
- change('panel','front',false);assert.equal(a.panel.labelSides.front,false);assert.equal(a.panel.labelSides.rear,true);assert.doesNotMatch(node('#canvas').innerHTML,/data-component-label=/);
- await act('rear');assert.match(node('#canvas').innerHTML,/data-component-label=/);assert.match(node('#canvas').innerHTML,/data-component-ref=/);
- change('panel','rear',false);assert.doesNotMatch(node('#canvas').innerHTML,/data-component-ref=/);await act('undo');assert.equal(a.panel.labelSides.rear,true);assert.equal(a.panel.labelSides.front,false);
- const id=a.panel.components[0].id;api.select([id]);assert.match(node('#rightContent').innerHTML,/Label on front/);change('component','rear',false,id);assert.equal(a.panel.components[0].labelSides.rear,false);await act('undo');assert.equal(a.panel.components[0].labelSides.rear,true);
- const json=JSON.stringify(a.p);await api.openProject(JSON.parse(json));assert.equal(a.panel.labelSides.front,false);assert.equal(a.panel.labelSides.rear,true);
- await act('stage',{stage:'fabricate'});assert.match(node('#stageSurface').innerHTML,/Rear guide SVG/);assert.match(node('#stageSurface').innerHTML,/out-rear/);
- await act('stage',{stage:'arrange'});await act('front');
+test('exactly two component fabrication checkboxes save, undo, and drive front/rear export selection',async()=>{
+ await api.openProject(example());await act('stage',{stage:'arrange'});const a=api.app,id=a.panel.components[0].id;api.select([id]);
+ const html=node('#rightContent').innerHTML;assert.equal((html.match(/data-label-side=/g)||[]).length,2);assert.match(html,/> Label on Front</);assert.match(html,/> Label on Rear</);assert.doesNotMatch(html,/master|assembly guide/i);
+ const index=fs.readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');assert.doesNotMatch(index,/labels-front|labels-rear|data-label-side/);
+ const change=(side,checked)=>listeners.change({target:{dataset:{labelScope:'component',labelSide:side,id},checked}});
+ change('front',false);change('rear',true);assert.deepEqual(a.panel.components[0].labelSides,{front:false,rear:true});
+ await act('rear');assert.ok(node('#canvas').innerHTML.includes(`data-component-label="${id}"`));change('rear',false);assert.ok(!node('#canvas').innerHTML.includes(`data-component-label="${id}"`));await act('undo');assert.deepEqual(a.panel.components[0].labelSides,{front:false,rear:true});
+ const json=JSON.stringify(a.p);await api.openProject(JSON.parse(json));assert.deepEqual(a.panel.components[0].labelSides,{front:false,rear:true});assert.equal(a.panel.labelSides,undefined);
+ await act('stage',{stage:'fabricate'});assert.doesNotMatch(node('#stageSurface').innerHTML,/out-rear|Rear guide/);await act('rear');assert.match(node('#stageSurface').innerHTML,/REAR/);await act('front');assert.match(node('#stageSurface').innerHTML,/FRONT/);
+ await act('stage',{stage:'arrange'});
 });

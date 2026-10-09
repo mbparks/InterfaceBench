@@ -1,3 +1,21 @@
+# Verification record — 1.4.3-rc.1
+
+**64 existing automated checks pass** (`qa/v143-test-results.txt`). The actual canvas renderer was exercised with labels enabled on both faces. After excluding physical position and rotation, both rendered label elements have identical attributes: dark `#253d2c` fill, no outline, the same text size and alignment. Results are recorded in `qa/v143-label-appearance.json`.
+
+The generated front/rear SVGs were rasterized and visually reviewed (`qa/v143-front-labels.png` and `qa/v143-rear-labels.png`). Both use the plain front-label appearance. These are static canvas renders, not browser UI screenshots. Real-browser QA remains pending under the existing Sites restriction. The two fabrication checkboxes and export behavior are unchanged.
+
+## Previous verification
+
+# Verification record — 1.4.2-rc.1
+
+**64 automated checks pass** (`qa/v142-test-results.txt`). The label regression tests now require exactly two per-component checkboxes and actual front/rear manufacturing output. All four combinations, legacy master migration, malformed flags, saved/undoable choices, rear-only path content, mirrored anchors with readable glyphs, declared SVG origins, export-layer inclusion, PDF and automatic per-face ZIP contents are covered. New parts are front-only by default.
+
+`qa/v142-rear-labels.svg` and `qa/v142-rear-labels.pdf` were rendered and visually reviewed. The PDF contains the three selected labels at the reflected positions, without rear-body diagrams, holes or auto-generated references; no alignment crosshairs are placed inside the panel. `scripts/label-fixture.mjs` reproduces the example. Rasterization is a static export check, not browser UI QA.
+
+Real-browser acceptance remains open under the Sites workflow restriction. The browser journey was updated for the two checkbox names, persistence and a rear SVG download from the normal Fabricate controls. Verify the same behavior in a supported browser before stable release, including PNG and ZIP downloads, keyboard focus and mobile layout.
+
+## Historical verification (superseded behavior where noted)
+
 # Verification record — 1.4.1-rc.1
 
 2026-10-09. **64 automated tests pass** (`qa/v141-test-results.txt`). Seven new checks cover all four front/rear combinations, per-component gating, legacy defaults, malformed data rejection, JSON persistence, cut/artwork separation, mirrored asymmetric geometry, readable rotated glyphs, baseline/fingerprint changes, rear PDF/ZIP export and UI controls/undo.
